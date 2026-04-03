@@ -1,0 +1,15 @@
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\obj\Debug\net9.0\CleanArchCQRSandMediator.Application.csproj.AssemblyReference.cache
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\obj\Debug\net9.0\CleanArchCQRSandMediator.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\obj\Debug\net9.0\CleanArchCQRSandMediator.Application.AssemblyInfoInputs.cache
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\obj\Debug\net9.0\CleanArchCQRSandMediator.Application.AssemblyInfo.cs
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\obj\Debug\net9.0\CleanArchCQRSandMediator.Application.csproj.CoreCompileInputs.cache
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\bin\Debug\net9.0\CleanArchCQRSandMediator.Application.deps.json
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\bin\Debug\net9.0\CleanArchCQRSandMediator.Application.dll
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\bin\Debug\net9.0\CleanArchCQRSandMediator.Application.pdb
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\bin\Debug\net9.0\CleanArchCQRSandMediator.Domain.dll
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\bin\Debug\net9.0\CleanArchCQRSandMediator.Domain.pdb
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\obj\Debug\net9.0\CleanArc.F1F71487.Up2Date
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\obj\Debug\net9.0\CleanArchCQRSandMediator.Application.dll
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\obj\Debug\net9.0\refint\CleanArchCQRSandMediator.Application.dll
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\obj\Debug\net9.0\CleanArchCQRSandMediator.Application.pdb
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Application\obj\Debug\net9.0\ref\CleanArchCQRSandMediator.Application.dll

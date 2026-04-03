@@ -1,0 +1,12 @@
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\bin\Debug\net9.0\CleanArchCQRSandMediator.Domain.deps.json
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\bin\Debug\net9.0\CleanArchCQRSandMediator.Domain.dll
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\bin\Debug\net9.0\CleanArchCQRSandMediator.Domain.pdb
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\obj\Debug\net9.0\CleanArchCQRSandMediator.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\obj\Debug\net9.0\CleanArchCQRSandMediator.Domain.AssemblyInfoInputs.cache
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\obj\Debug\net9.0\CleanArchCQRSandMediator.Domain.AssemblyInfo.cs
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\obj\Debug\net9.0\CleanArchCQRSandMediator.Domain.csproj.CoreCompileInputs.cache
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\obj\Debug\net9.0\CleanArchCQRSandMediator.Domain.dll
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\obj\Debug\net9.0\refint\CleanArchCQRSandMediator.Domain.dll
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\obj\Debug\net9.0\CleanArchCQRSandMediator.Domain.pdb
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\obj\Debug\net9.0\ref\CleanArchCQRSandMediator.Domain.dll
+D:\Out-repo\api\CleanArchCQRSandMediator\CleanArchCQRSandMediator.Domain\obj\Debug\net9.0\CleanArchCQRSandMediator.Domain.csproj.AssemblyReference.cache
