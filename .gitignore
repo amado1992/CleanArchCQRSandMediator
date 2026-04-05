@@ -5,3 +5,7 @@
 /.vs/CleanArchCQRSandMediator/FileContentIndex
 /.vs/CleanArchCQRSandMediator/CopilotIndices/17.14.1347.20289
 /.vs/CleanArchCQRSandMediator
+
+# Build output
+**/bin/
+**/obj/
