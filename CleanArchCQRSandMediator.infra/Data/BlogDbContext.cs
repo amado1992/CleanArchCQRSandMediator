@@ -11,5 +11,20 @@ namespace CleanArchCQRSandMediator.infra.Data
         }
 
         public DbSet<Blog> Blogs { get; set; }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await base.SaveChangesAsync();
+        }
+
+        void IApplicationDbContext.SaveChanges()
+        {
+            base.SaveChanges();
+        }
+
+        public void SaveChangesSynchronous()
+        {
+            base.SaveChanges();
+        }
     }
 }

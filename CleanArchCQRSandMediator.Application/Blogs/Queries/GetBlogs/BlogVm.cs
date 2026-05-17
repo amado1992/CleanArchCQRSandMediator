@@ -1,4 +1,5 @@
-﻿using CleanArchCQRSandMediator.Application.Common.Mappings;
+﻿using AutoMapper;
+using CleanArchCQRSandMediator.Application.Common.Mappings;
 using CleanArchCQRSandMediator.Domain.Entity;
 
 namespace CleanArchCQRSandMediator.Application.Blogs.Queries.GetBlogs
@@ -9,5 +10,10 @@ namespace CleanArchCQRSandMediator.Application.Blogs.Queries.GetBlogs
         public string Name { get; set; }
         public string Description { get; set; }
         public string Author { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<Blog, BlogVm>();
+        }
     }
 }

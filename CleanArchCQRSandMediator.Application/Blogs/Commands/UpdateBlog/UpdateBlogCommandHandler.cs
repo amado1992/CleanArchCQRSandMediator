@@ -1,0 +1,35 @@
+﻿using CleanArchCQRSandMediator.Application.Common.Interfaces;
+using CleanArchCQRSandMediator.Domain.Entity;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace CleanArchCQRSandMediator.Application.Blogs.Commands.UpdateBlog
+{
+    public class UpdateBlogCommandHandler : IRequestHandler<UpdateBlogCommand, int> // IRequestHandler<UpdateBlogCommand>
+    {
+        private readonly IApplicationDbContext _context;
+        public UpdateBlogCommandHandler(IApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<int> Handle(UpdateBlogCommand request, CancellationToken cancellationToken)
+        {
+            var blog = new Blog()
+            {
+                Id = request.Id,
+                Author = request.Author,
+                Description = request.Description,
+                Name = request.Name
+            };
+
+            return await _context.Blogs
+                .Where(model => model.Id == request.Id)
+                .ExecuteUpdateAsync(setters => setters
+                .SetProperty(m => m.Id, blog.Id)
+                .SetProperty(m => m.Name, blog.Name)
+                .SetProperty(m => m.Description, blog.Description)
+                .SetProperty(m => m.Author, blog.Author));
+        }
+    }
+}
