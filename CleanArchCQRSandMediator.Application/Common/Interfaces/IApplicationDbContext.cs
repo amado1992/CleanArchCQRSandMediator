@@ -1,5 +1,6 @@
 ﻿using CleanArchCQRSandMediator.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace CleanArchCQRSandMediator.Application.Common.Interfaces
 {
@@ -7,6 +8,7 @@ namespace CleanArchCQRSandMediator.Application.Common.Interfaces
     {
         public DbSet<Blog> Blogs { get; set; }
         public Task<int> SaveChangesAsync();
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
         // Both methods do the same thing
         public void SaveChangesSynchronous();

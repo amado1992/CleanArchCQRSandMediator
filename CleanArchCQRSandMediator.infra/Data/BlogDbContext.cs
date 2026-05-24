@@ -26,5 +26,10 @@ namespace CleanArchCQRSandMediator.infra.Data
         {
             base.SaveChanges();
         }
+
+        async Task<int> IApplicationDbContext.SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            return await base.SaveChangesAsync(cancellationToken);
+        }
     }
 }

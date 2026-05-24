@@ -50,10 +50,17 @@ namespace CleanArchCQRSandMediator.API.Controllers
             return NoContent();
         }*/
 
-        [HttpPut]
+        /*[HttpPut]
         public async Task<ActionResult<int>> UpdateAsync(UpdateBlogCommand command)
         {
             return await Mediator.Send(command);
+        }*/
+
+        [HttpPut]
+        public async Task<ActionResult<BlogVm>> UpdateAsync(UpdateBlogCommand command)
+        {
+            var updatedBlog = await Mediator.Send(command);
+            return Ok(updatedBlog);
         }
     }
 }
