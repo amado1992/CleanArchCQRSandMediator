@@ -1,7 +1,7 @@
 ﻿using CleanArchCQRSandMediator.Application.Blogs.Commands.CreateBlog;
+using CleanArchCQRSandMediator.Application.Blogs.Commands.UpdateBlog;
 using CleanArchCQRSandMediator.Application.Blogs.Queries.GetBlogById;
 using CleanArchCQRSandMediator.Application.Blogs.Queries.GetBlogs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchCQRSandMediator.API.Controllers
@@ -35,6 +35,25 @@ namespace CleanArchCQRSandMediator.API.Controllers
 
             // return CreatedAtAction(nameof(GetByIdAsync), new { id = createBlog.Id }, createBlog);
             return CreatedAtRoute("GetBlogById", new { id = createBlog.Id }, createBlog);
+        }
+
+        /*[HttpPut("id")]
+        public async Task<IActionResult> UpdateAsync(int id, UpdateBlogCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+
+            await Mediator.Send(command);
+
+            return NoContent();
+        }*/
+
+        [HttpPut]
+        public async Task<ActionResult<int>> UpdateAsync(UpdateBlogCommand command)
+        {
+            return await Mediator.Send(command);
         }
     }
 }
