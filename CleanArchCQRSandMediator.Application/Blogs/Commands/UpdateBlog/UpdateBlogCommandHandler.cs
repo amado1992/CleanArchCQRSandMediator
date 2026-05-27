@@ -19,6 +19,9 @@ namespace CleanArchCQRSandMediator.Application.Blogs.Commands.UpdateBlog
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Bulk update
+        /// </summary>
         /*public async Task<int> Handle(UpdateBlogCommand request, CancellationToken cancellationToken)
         {
             var blog = new Blog()
@@ -52,9 +55,17 @@ namespace CleanArchCQRSandMediator.Application.Blogs.Commands.UpdateBlog
             return blog.Id;
         }*/
 
+        /// <summary>
+        /// Tracked entity (recommended)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
         public async Task<BlogVm> Handle(UpdateBlogCommand request, CancellationToken cancellationToken)
         {
-            var blog = await _context.Blogs.FindAsync(new object[] { request.Id }, cancellationToken);
+            // var blog = await _context.Blogs.FindAsync(new object[] { request.Id }, cancellationToken);
+            var blog = await _context.Blogs.FindAsync(request.Id, cancellationToken);
             if (blog is null) throw new NotFoundException(nameof(Blog), request.Id);
 
             blog.Name = request.Name;
