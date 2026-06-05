@@ -1,4 +1,4 @@
-﻿namespace CleanArchCQRSandMediator.Domain.Entity
+﻿namespace CleanArchCQRSandMediator.Domain.Entities.Business
 {
     public class Blog
     {

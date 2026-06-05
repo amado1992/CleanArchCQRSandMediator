@@ -1,5 +1,5 @@
 ﻿using CleanArchCQRSandMediator.Application.Common.Interfaces;
-using CleanArchCQRSandMediator.Domain.Entity;
+using CleanArchCQRSandMediator.Domain.Entities.Business;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchCQRSandMediator.infra.Data

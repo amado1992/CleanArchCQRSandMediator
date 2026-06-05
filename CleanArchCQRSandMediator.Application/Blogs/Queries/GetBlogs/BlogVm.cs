@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchCQRSandMediator.Application.Common.Mappings;
-using CleanArchCQRSandMediator.Domain.Entity;
+using CleanArchCQRSandMediator.Domain.Entities.Business;
 
 namespace CleanArchCQRSandMediator.Application.Blogs.Queries.GetBlogs
 {

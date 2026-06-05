@@ -1,4 +1,4 @@
-﻿using CleanArchCQRSandMediator.Domain.Entity;
+﻿using CleanArchCQRSandMediator.Domain.Entities.Business;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 
