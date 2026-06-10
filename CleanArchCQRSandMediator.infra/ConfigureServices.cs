@@ -12,16 +12,16 @@ namespace CleanArchCQRSandMediator.infra
         (this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString =
-                configuration.GetConnectionString("BlogDbContext")
-                ?? throw new InvalidOperationException("Connection string" + " BlogDbContext not found.");
+                configuration.GetConnectionString("ApplicationDbContext")
+                ?? throw new InvalidOperationException("Connection string" + " ApplicationDbContext not found.");
 
-            services.AddDbContext<BlogDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseNpgsql(connectionString);
             });
 
-            // Register the IApplicationDbContext interface using BlogDbContext as the implementation
-            services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<BlogDbContext>());
+            // Register the IApplicationDbContext interface using ApplicationDbContext as the implementation
+            services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
             return services;
         }

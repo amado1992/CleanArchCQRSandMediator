@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CleanArchCQRSandMediator.Domain.Entities.Business;
+using Microsoft.AspNetCore.Identity;
 
 namespace CleanArchCQRSandMediator.Domain.Entities.Identity
 {
-    public class ApplicationUser : IdentityUser<Guid>
+    public class ApplicationUser : IdentityUser<int>
     {
         public string FirstName { get; set; } = string.Empty;
         public string MiddleName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
+        public List<Tenant> Tenants { get; } = [];
+        public List<ApplicationUserTenant> ApplicationUserTenants { get; } = [];
     }
 }
