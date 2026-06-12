@@ -1,5 +1,7 @@
 using CleanArchCQRSandMediator.Application;
 using CleanArchCQRSandMediator.infra;
+using CleanArchCQRSandMediator.infra.Data;
+using CleanArchCQRSandMediator.infra.Persistence.InitialData;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,5 +36,25 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Initial data
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    try
+    {
+        if (serviceProvider == null) throw new ArgumentNullException();
+
+        var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+        if (context == null) throw new InvalidOperationException();
+
+        SeedData.Initialize(context);
+    }
+    catch (Exception ex)
+    {
+        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred seeding the DB.");
+    }
+}
 
 app.Run();
