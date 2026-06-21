@@ -1,4 +1,5 @@
-﻿using CleanArchCQRSandMediator.Domain.Entities.Identity;
+﻿using CleanArchCQRSandMediator.Domain.Entities.Business.Product;
+using CleanArchCQRSandMediator.Domain.Entities.Identity;
 
 namespace CleanArchCQRSandMediator.Domain.Entities.Business
 {
@@ -12,6 +13,12 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business
         public bool IsActive { get; set; } = true;
         public List<ApplicationUser> ApplicationUsers { get; } = [];
         public List<ApplicationUserTenant> ApplicationUserTenants { get; } = [];
-
+        public List<Brand> Brands { get; } = [];
+        public List<Category> Categories { get; } = [];
+        public List<Domain.Entities.Business.Product.Product> Products { get; } = [];
+        public List<BranchOffice> BranchOffices { get; } = [];
+        public List<Customer> Customers { get; } = [];
+        public List<Provider> Providers { get; } = [];
+        public List<Purchase> Purchases { get; } = [];
     }
 }

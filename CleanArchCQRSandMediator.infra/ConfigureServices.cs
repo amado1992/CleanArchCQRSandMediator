@@ -1,5 +1,6 @@
 ﻿using CleanArchCQRSandMediator.Application.Common.Interfaces;
 using CleanArchCQRSandMediator.infra.Data;
+using CleanArchCQRSandMediator.infra.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,8 @@ namespace CleanArchCQRSandMediator.infra
 
             // Register the IApplicationDbContext interface using ApplicationDbContext as the implementation
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
+            
 
             return services;
         }

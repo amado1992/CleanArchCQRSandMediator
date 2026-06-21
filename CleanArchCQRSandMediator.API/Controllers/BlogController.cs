@@ -3,6 +3,7 @@ using CleanArchCQRSandMediator.Application.Blogs.Commands.DeleteBlog;
 using CleanArchCQRSandMediator.Application.Blogs.Commands.UpdateBlog;
 using CleanArchCQRSandMediator.Application.Blogs.Queries.GetBlogById;
 using CleanArchCQRSandMediator.Application.Blogs.Queries.GetBlogs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchCQRSandMediator.API.Controllers
@@ -12,6 +13,8 @@ namespace CleanArchCQRSandMediator.API.Controllers
     public class BlogController : ApiControllerBase
     {
         [HttpGet]
+        // [Authorize(Roles = "Super administrador")]
+        [Authorize(Roles = "Dueño")]
         public async Task<IActionResult> GetAllAsync()
         {
             var blogs = await Mediator.Send(new GetBlogQuery());

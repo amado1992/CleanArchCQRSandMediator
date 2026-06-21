@@ -10,3 +10,7 @@
 **/bin/
 **/obj/
 /.vs/ProjectEvaluation
+
+# appsettings
+/CleanArchCQRSandMediator.API/appsettings.json
+/CleanArchCQRSandMediator.API/appsettings.Development.json
