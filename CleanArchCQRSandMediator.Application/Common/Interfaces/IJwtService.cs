@@ -5,6 +5,6 @@
     /// </summary>
     public interface IJwtService
     {
-        string GetJtiFromToken(string token);
+        public string GetJtiFromToken(string token);
     }
 }

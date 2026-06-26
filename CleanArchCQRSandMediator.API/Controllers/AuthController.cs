@@ -1,4 +1,5 @@
 ﻿using CleanArchCQRSandMediator.Application.Auth.Commands.Login;
+using CleanArchCQRSandMediator.Application.Auth.Commands.Logout;
 using CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken;
 using CleanArchCQRSandMediator.Application.Auth.Commands.Register;
 using CleanArchCQRSandMediator.Application.Dtos.Auth;
@@ -37,12 +38,10 @@ namespace CleanArchCQRSandMediator.API.Controllers
 
         [HttpPost("logout")]
         [Authorize]
-        public Task<IActionResult> Logout([FromBody] string refreshToken)
+        public async Task<IActionResult> Logout(LogoutCommand command)
         {
-            // Revocar refresh token
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            // Implementar lógica de revocación en repositorio
-            return Task.FromResult<IActionResult>(Ok());
+            await Mediator.Send(command);
+            return Ok(new { message = "Session successfully closed" });
         }
     }
 }

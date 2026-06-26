@@ -33,18 +33,18 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken
             var userId = principal.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == null)
-                throw new SecurityTokenException("Id usuario es nulo");
+                throw new SecurityTokenException("User ID not found");
 
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
             if (user == null)
-                throw new SecurityTokenException("Usuario no encontrado");
+                throw new SecurityTokenException("User not found");
 
             var storedRefreshToken = await _context.RefreshTokens
                 .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken && rt.ApplicationUserId.ToString() == userId && !rt.IsRevoked, cancellationToken);
 
             if (storedRefreshToken == null || storedRefreshToken.ExpiresAt < DateTime.UtcNow)
-                throw new SecurityTokenException("Refresh token inválido o expirado");
+                throw new SecurityTokenException("Refresh token invalid or expired");
 
             // Rotación: revocar el refresh token usado
             storedRefreshToken.IsRevoked = true;

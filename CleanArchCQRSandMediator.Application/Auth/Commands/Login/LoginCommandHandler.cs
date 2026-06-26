@@ -29,10 +29,10 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Login
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
-                throw new UnauthorizedAccessException("Credenciales inválidas");
+                throw new UnauthorizedAccessException("Invalid credentials");
 
             if (!user.IsActive)
-                throw new UnauthorizedAccessException("Usuario desactivado");
+                throw new UnauthorizedAccessException("User deactivated");
 
             // Retrieve user roles
             var roles = await _userManager.GetRolesAsync(user);

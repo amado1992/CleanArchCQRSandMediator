@@ -57,6 +57,8 @@ builder.Services.AddAuthentication(options =>
 // Repositories and services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 // MediatR and FluentValidation (opcional pero recomendado)
 builder.Services.AddApplicationServices();
