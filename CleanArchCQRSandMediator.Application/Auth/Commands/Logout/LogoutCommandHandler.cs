@@ -8,11 +8,13 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Logout
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IJwtService _jwtService;
 
-        public LogoutCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
+        public LogoutCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IJwtService jwtService)
         {
             _context = context;
             _currentUserService = currentUserService;
+            _jwtService = jwtService;
         }
 
         public async Task Handle(LogoutCommand request, CancellationToken cancellationToken)
@@ -20,9 +22,13 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Logout
             // The handler obtains the userId from the current user service
             var userId = _currentUserService.GetUserId();
 
+            var jwtId = _jwtService.GetJtiFromToken(request.AccessToken);
+
             // Find the refresh token that matches the token and the userId
             var refreshTokenEntity = await _context.RefreshTokens
-                .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken && rt.ApplicationUserId == userId, cancellationToken);
+                .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken 
+                                        && rt.ApplicationUserId == userId
+                                        && rt.JwtId == jwtId, cancellationToken);
 
             if (refreshTokenEntity != null)
             {

@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken
 {
@@ -30,9 +31,9 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken
         public async Task<LoginResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
             var principal = _tokenService.GetPrincipalFromExpiredToken(request.AccessToken);
-            var userId = principal.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-            if (userId == null)
+            var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
                 throw new SecurityTokenException("User ID not found");
 
             var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -40,15 +41,18 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken
             if (user == null)
                 throw new SecurityTokenException("User not found");
 
+            var jwtId = _jwtService.GetJtiFromToken(request.AccessToken);
             var storedRefreshToken = await _context.RefreshTokens
-                .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken && rt.ApplicationUserId.ToString() == userId && !rt.IsRevoked, cancellationToken);
+                .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken
+                                        && rt.ApplicationUserId == userId
+                                        && rt.JwtId == jwtId
+                                        && !rt.IsRevoked, cancellationToken);
 
             if (storedRefreshToken == null || storedRefreshToken.ExpiresAt < DateTime.UtcNow)
                 throw new SecurityTokenException("Refresh token invalid or expired");
 
             // Rotation: revoke the used refresh token
             storedRefreshToken.IsRevoked = true;
-            _context.RefreshTokens.Update(storedRefreshToken);
 
             // Generate new access token
             var roles = await _userManager.GetRolesAsync(user);
