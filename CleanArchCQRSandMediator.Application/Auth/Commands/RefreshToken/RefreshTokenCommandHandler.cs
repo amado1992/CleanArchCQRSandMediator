@@ -46,16 +46,16 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken
             if (storedRefreshToken == null || storedRefreshToken.ExpiresAt < DateTime.UtcNow)
                 throw new SecurityTokenException("Refresh token invalid or expired");
 
-            // Rotación: revocar el refresh token usado
+            // Rotation: revoke the used refresh token
             storedRefreshToken.IsRevoked = true;
             _context.RefreshTokens.Update(storedRefreshToken);
 
-            // Generar nuevo access token
+            // Generate new access token
             var roles = await _userManager.GetRolesAsync(user);
             var permissionClaims = await _userManager.GetClaimsAsync(user);
             var newAccessToken = _tokenService.GenerateAccessToken(user, roles, permissionClaims);
 
-            // Generar nuevo refresh token
+            // Generate new refresh token
             var newRefreshToken = new Domain.Entities.Business.RefreshToken
             {
                 Token = _tokenService.GenerateRefreshToken(),
