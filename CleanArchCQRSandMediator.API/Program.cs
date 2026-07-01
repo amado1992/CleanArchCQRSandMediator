@@ -16,9 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-// Cargar la sección de configuración y mapearla a la clase JwtSettings
+// Load the configuration section and map it to the JwtSettings class
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
-builder.Services.AddSingleton(jwtSettings!); // registra la instancia concreta
+builder.Services.AddSingleton(jwtSettings!);
 
 // Add layer dependency
 
@@ -98,6 +98,29 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// Data initialization (SEED)
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    try
+    {
+        if (serviceProvider == null) throw new ArgumentNullException();
+
+        var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+        if (context == null) throw new InvalidOperationException();
+
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+        var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+        await SeedData.InitializeAsync(context, roleManager, userManager);
+    }
+    catch (Exception ex)
+    {
+        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred seeding the DB.");
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -112,25 +135,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-// Initial data
-using (var scope = app.Services.CreateScope())
-{
-    var serviceProvider = scope.ServiceProvider;
-    try
-    {
-        if (serviceProvider == null) throw new ArgumentNullException();
-
-        var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
-        if (context == null) throw new InvalidOperationException();
-
-        SeedData.Initialize(context);
-    }
-    catch (Exception ex)
-    {
-        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred seeding the DB.");
-    }
-}
 
 app.Run();

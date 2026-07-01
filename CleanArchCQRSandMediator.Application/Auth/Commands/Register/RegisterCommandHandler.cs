@@ -50,7 +50,7 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Register
                 throw new ApplicationException($"Error creating user: {string.Join(", ", result.Errors)}");
 
             // Add roles
-            await _userManager.AddToRolesAsync(user, request.RoleNormalizedNames);
+            await _userManager.AddToRolesAsync(user, request.RoleNames);
 
             // Add tenants
             var createdUser = await _userManager.FindByEmailAsync(request.Email);

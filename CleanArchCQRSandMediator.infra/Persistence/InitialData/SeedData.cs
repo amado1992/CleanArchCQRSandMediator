@@ -20,12 +20,162 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
             CreateTenants(context);
         }
 
+        public static async Task InitializeAsync(
+            ApplicationDbContext context,
+            RoleManager<ApplicationRole> roleManager,
+            UserManager<ApplicationUser> userManager)
+        {
+            // Apply pending migrations
+            if ((await context.Database.GetPendingMigrationsAsync()).Any())
+            {
+                await context.Database.MigrateAsync();
+            }
+
+            await CreateRolesAsync(roleManager);
+            await CreateUsersAsync(userManager, roleManager);
+            await CreateTenantsAsync(context);
+            await CreateCurrenciesAsync(context);
+        }
+
+        /// <summary>
+        /// Create role async
+        /// </summary>
+        /// <param name="roleManager"></param>
+        /// <returns></returns>
+        public static async Task CreateRolesAsync(RoleManager<ApplicationRole> roleManager)
+        {
+            var roles = new[] { "Super administrador", "Dueño", "Miembro" };
+            foreach (var roleName in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(roleName))
+                {
+                    var role = new ApplicationRole { Name = roleName };
+                    await roleManager.CreateAsync(role);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create user async
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="roleManager"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private static async Task CreateUsersAsync(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+        {
+            var users = new[]
+            {
+                new
+                {
+                    Email = "aramirezamdo1992@gmail.com",
+                    FirstName = "Amado",
+                    MiddleName = "Rafael",
+                    LastName = "Ramírez López",
+                    FullName = "Amado Rafael Ramírez López",
+                    Password = "Working02026.com",
+                    RoleNormalizedName = "SUPER ADMINISTRADOR"
+                }
+            };
+
+            foreach (var userData in users)
+            {
+                if (await userManager.FindByEmailAsync(userData.Email) != null)
+                    continue;
+
+                var user = new ApplicationUser
+                {
+                    UserName = userData.Email,
+                    Email = userData.Email,
+                    FirstName = userData.FirstName,
+                    MiddleName = userData.MiddleName,
+                    LastName = userData.LastName,
+                    FullName = userData.FullName,
+                    EmailConfirmed = true,
+                    LockoutEnabled = false,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    SecurityStamp = Guid.NewGuid().ToString()
+                };
+
+                var result = await userManager.CreateAsync(user, userData.Password);
+                if (!result.Succeeded)
+                {
+                    throw new Exception($"Error creating user {userData.Email}: {string.Join(", ", result.Errors)}");
+                }
+
+                // Assign role
+                if (!string.IsNullOrEmpty(userData.RoleNormalizedName))
+                {
+                    var role = await roleManager.FindByNameAsync(userData.RoleNormalizedName);
+                    if (role != null)
+                    {
+                        await userManager.AddToRoleAsync(user, role.Name!);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create tenants async
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private static async Task CreateTenantsAsync(ApplicationDbContext context)
+        {
+            var tenants = new[]
+            {
+                new Tenant
+                {
+                    Name = "Nina Nails Shop",
+                    Description = "",
+                    Slug = "nina_nails_shop",
+                    IsActive = true
+                }
+            };
+
+            foreach (var tenant in tenants)
+            {
+                if (!await context.Tenants.AnyAsync(t => t.Slug == tenant.Slug))
+                {
+                    await context.Tenants.AddAsync(tenant);
+                }
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Create currencies async
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private static async Task CreateCurrenciesAsync(ApplicationDbContext context)
+        {
+            var CreatedAt = DateTime.UtcNow;
+            var currencies = new List<Currency>
+            {
+                new Currency { Code = "EUR", Number = 978, Symbol = "€", CreatedAt = CreatedAt },
+                new Currency { Code = "USD", Number = 840, Symbol = "$", CreatedAt = CreatedAt },
+            };
+
+            foreach (var currency in currencies)
+            {
+                if (!await context.Currencies.AnyAsync(c => c.Code == currency.Code))
+                {
+                    await context.Currencies.AddAsync(currency);
+                }
+            }
+
+            await context.SaveChangesAsync();
+        }
+
         private static void CreateRoles(ApplicationDbContext context)
         {
             var rolSuperAdmin = new ApplicationRole()
             {
                 Name = "Super administrador",
-                NormalizedName = "SUPER_ADMIN",
+                NormalizedName = "SUPER ADMINISTRADOR",
             };
 
             CreateRole(context, rolSuperAdmin);
@@ -33,7 +183,7 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
             var rolOwner = new ApplicationRole()
             {
                 Name = "Dueño",
-                NormalizedName = "OWNER"
+                NormalizedName = "DUEÑO"
             };
 
             CreateRole(context, rolOwner);
@@ -42,7 +192,7 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
             var rolMember = new ApplicationRole()
             {
                 Name = "Miembro",
-                NormalizedName = "MEMBER"
+                NormalizedName = "MIEMBRO"
             };
 
             CreateRole(context, rolMember);
