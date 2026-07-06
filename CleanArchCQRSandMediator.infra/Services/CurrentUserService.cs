@@ -31,5 +31,18 @@ namespace CleanArchCQRSandMediator.infra.Services
         {
             return _httpContextAccessor.HttpContext?.User?.FindFirstValue("fullName");
         }
+
+        public IList<string> GetRoles()
+        {
+            return _httpContextAccessor.HttpContext?.User
+                .FindAll(ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList() ?? new List<string>();
+        }
+
+        public bool HasRole(string roleName)
+        {
+            return _httpContextAccessor.HttpContext?.User?.IsInRole(roleName) ?? false;
+        }
     }
 }

@@ -5,6 +5,8 @@
         public int GetUserId();
         public string? GetUserEmail();
         public string? GetFullName();
+        public IList<string> GetRoles();
         public bool IsAuthenticated();
+        public bool HasRole(string roleName);
     }
 }
