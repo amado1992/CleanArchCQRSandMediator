@@ -3,10 +3,12 @@ using CleanArchCQRSandMediator.Application.Common.Configurations;
 using CleanArchCQRSandMediator.Application.Common.Interfaces;
 using CleanArchCQRSandMediator.Domain.Entities.Identity;
 using CleanArchCQRSandMediator.infra;
+using CleanArchCQRSandMediator.infra.Authorization;
 using CleanArchCQRSandMediator.infra.Data;
 using CleanArchCQRSandMediator.infra.Persistence.InitialData;
 using CleanArchCQRSandMediator.infra.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -57,8 +59,18 @@ builder.Services.AddAuthentication(options =>
 // Repositories and services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+// Authorization handler registration (Scoped because it uses DbContext)
+builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+
+// Custom Policy Provider Registration (Singleton)
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+
+// Basic authorization
+builder.Services.AddAuthorization();
 
 // MediatR and FluentValidation (opcional pero recomendado)
 builder.Services.AddApplicationServices();
@@ -131,9 +143,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

@@ -1,6 +1,5 @@
 ﻿using CleanArchCQRSandMediator.Application.Common.Interfaces;
 using CleanArchCQRSandMediator.infra.Data;
-using CleanArchCQRSandMediator.infra.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

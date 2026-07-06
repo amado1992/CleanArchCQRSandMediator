@@ -6,7 +6,7 @@ namespace CleanArchCQRSandMediator.Application.Authorization
     public class PermissionRequirement : IAuthorizationRequirement
     {
         public PermissionAction Action { get; }
-        public string Resource { get; } // Opcional, para permisos por recurso (ej. "articles", "users")
+        public string Resource { get; } // Optional, for permissions per resource (e.g. "articles", "users")
 
         public PermissionRequirement(PermissionAction action, string? resource = null)
         {
@@ -14,7 +14,7 @@ namespace CleanArchCQRSandMediator.Application.Authorization
             Resource = resource ?? string.Empty;
         }
 
-        // Método para generar el nombre del permiso en formato "resource.action"
+        // Method to generate the permission name in "resource.action" format
         public string GetPermissionName() => string.IsNullOrEmpty(Resource)
             ? Action.ToString().ToLower()
             : $"{Resource}.{Action.ToString().ToLower()}";

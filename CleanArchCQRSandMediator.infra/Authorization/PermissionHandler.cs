@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace CleanArchCQRSandMediator.infra.Authorization
 {
-    internal class PermissionHandler : AuthorizationHandler<PermissionRequirement>
+    public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;

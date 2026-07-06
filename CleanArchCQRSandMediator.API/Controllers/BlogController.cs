@@ -1,8 +1,10 @@
-﻿using CleanArchCQRSandMediator.Application.Blogs.Commands.CreateBlog;
+﻿using CleanArchCQRSandMediator.Application.Authorization;
+using CleanArchCQRSandMediator.Application.Blogs.Commands.CreateBlog;
 using CleanArchCQRSandMediator.Application.Blogs.Commands.DeleteBlog;
 using CleanArchCQRSandMediator.Application.Blogs.Commands.UpdateBlog;
 using CleanArchCQRSandMediator.Application.Blogs.Queries.GetBlogById;
 using CleanArchCQRSandMediator.Application.Blogs.Queries.GetBlogs;
+using CleanArchCQRSandMediator.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +17,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         [HttpGet]
         // [Authorize(Roles = "Super administrador")]
         [Authorize(Roles = "Dueño")]
+        // [PermissionAuthorize(PermissionAction.View, "articles")]
         public async Task<IActionResult> GetAllAsync()
         {
             var blogs = await Mediator.Send(new GetBlogQuery());

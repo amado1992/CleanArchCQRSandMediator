@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CleanArchCQRSandMediator.Application.Authorization
 {
-    internal class PermissionAuthorizeAttribute : AuthorizeAttribute
+    public class PermissionAuthorizeAttribute : AuthorizeAttribute
     {
         public PermissionAuthorizeAttribute(PermissionAction action, string? resource = null)
         {

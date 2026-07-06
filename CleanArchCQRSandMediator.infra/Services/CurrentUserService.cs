@@ -26,5 +26,10 @@ namespace CleanArchCQRSandMediator.infra.Services
 
         public bool IsAuthenticated()
             => _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
+
+        public string? GetFullName()
+        {
+            return _httpContextAccessor.HttpContext?.User?.FindFirstValue("fullName");
+        }
     }
 }
