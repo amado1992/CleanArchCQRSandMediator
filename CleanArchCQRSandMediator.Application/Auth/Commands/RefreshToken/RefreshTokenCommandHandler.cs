@@ -1,4 +1,5 @@
 ﻿using CleanArchCQRSandMediator.Application.Common.Configurations;
+using CleanArchCQRSandMediator.Application.Common.Exceptions;
 using CleanArchCQRSandMediator.Application.Common.Interfaces;
 using CleanArchCQRSandMediator.Application.Dtos.Auth;
 using CleanArchCQRSandMediator.Domain.Entities.Identity;
@@ -34,12 +35,12 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken
 
             var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
-                throw new SecurityTokenException("User ID not found");
+                throw new NotFoundException($"User ID Claim {userIdClaim} not found");
 
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
             if (user == null)
-                throw new SecurityTokenException("User not found");
+                throw new NotFoundException(nameof(ApplicationUser), userId);
 
             var jwtId = _jwtService.GetJtiFromToken(request.AccessToken);
             var storedRefreshToken = await _context.RefreshTokens

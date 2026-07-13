@@ -32,11 +32,12 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Register
             var middleName = request.MiddleName;
             var lastName = request.LastName;
             var fullName = $"{firstName} {middleName} {lastName}";
+            var email = request.Email;
 
             var user = new ApplicationUser
             {
-                UserName = request.Email,
-                Email = request.Email,
+                UserName = email,
+                Email = email,
                 FirstName = firstName,
                 MiddleName = middleName,
                 LastName = lastName,
@@ -53,7 +54,7 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Register
             await _userManager.AddToRolesAsync(user, request.RoleNames);
 
             // Add tenants
-            var createdUser = await _userManager.FindByEmailAsync(request.Email);
+            var createdUser = await _userManager.FindByEmailAsync(email);
             foreach (int tenantId in tenantIds)
             {
                 var userTenant = new ApplicationUserTenant()

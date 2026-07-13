@@ -11,7 +11,7 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Login
     /// </summary>
     public record LoginCommand : IRequest<LoginResponse>
     {
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public string Email { get; init; } = string.Empty;
+        public string Password { get; init; } = string.Empty;
     }
 }
