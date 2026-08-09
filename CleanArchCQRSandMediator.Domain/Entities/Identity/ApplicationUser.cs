@@ -6,8 +6,9 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Identity
     public class ApplicationUser : IdentityUser<int>
     {
         public string FirstName { get; set; } = string.Empty;
-        public string MiddleName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
+        public string? MiddleName { get; set; } = string.Empty;
+        public string FirstSurname { get; set; } = string.Empty;
+        public string SecondSurname { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }

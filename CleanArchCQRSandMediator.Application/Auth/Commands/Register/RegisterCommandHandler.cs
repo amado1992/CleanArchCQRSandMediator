@@ -30,8 +30,9 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Register
 
             var firstName = request.FirstName;
             var middleName = request.MiddleName;
-            var lastName = request.LastName;
-            var fullName = $"{firstName} {middleName} {lastName}";
+            var firstSurname = request.FirstSurname;
+            var secondSurname = request.SecondSurname;
+            var fullName = $"{firstName} {middleName} {firstName} {secondSurname}";
             var email = request.Email;
 
             var user = new ApplicationUser
@@ -40,7 +41,8 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Register
                 Email = email,
                 FirstName = firstName,
                 MiddleName = middleName,
-                LastName = lastName,
+                FirstSurname = firstSurname,
+                SecondSurname = secondSurname,
                 FullName = fullName,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow

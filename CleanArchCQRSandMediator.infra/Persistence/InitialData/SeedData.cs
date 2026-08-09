@@ -71,7 +71,8 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
                     Email = "aramirezamdo1992@gmail.com",
                     FirstName = "Amado",
                     MiddleName = "Rafael",
-                    LastName = "Ramírez López",
+                    FirstSurname = "Ramírez",
+                    SecondSurname = "López",
                     FullName = "Amado Rafael Ramírez López",
                     Password = "Working02026.com",
                     RoleNormalizedName = "SUPER ADMINISTRADOR"
@@ -89,7 +90,8 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
                     Email = userData.Email,
                     FirstName = userData.FirstName,
                     MiddleName = userData.MiddleName,
-                    LastName = userData.LastName,
+                    FirstSurname = userData.FirstSurname,
+                    SecondSurname = userData.SecondSurname,
                     FullName = userData.FullName,
                     EmailConfirmed = true,
                     LockoutEnabled = false,
@@ -220,7 +222,7 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
         /// <param name="name"></param>
         /// <param name="password"></param>
         /// <param name="rolName"></param>
-        private static void CreateUser(ApplicationDbContext context, string email, string firstName, string middleName, string lastName, string fullName, string password, string rolNormalizedName)
+        private static void CreateUser(ApplicationDbContext context, string email, string firstName, string middleName, string firstSurname, string secondSurname, string fullName, string password, string rolNormalizedName)
         {
             var user = new ApplicationUser();
             var passwordHasher = new PasswordHasher<ApplicationUser>().HashPassword(user, password);
@@ -230,7 +232,8 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
             {
                 user.FirstName = firstName;
                 user.MiddleName = middleName;
-                user.LastName = lastName;
+                user.FirstSurname = firstSurname;
+                user.SecondSurname = secondSurname;
                 user.FullName = fullName;
                 user.UserName = email;
                 user.NormalizedUserName = email.ToUpper();
@@ -265,7 +268,7 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
         /// <param name="context"></param>
         private static void CreateUsers(ApplicationDbContext context)
         {
-            CreateUser(context, "aramirezamdo1992@gmail.com", "Amado", "Rafael", "Ramírez López", "Amado Rafael Ramírez López", "Working02026.com", "SUPER_ADMIN");
+            CreateUser(context, "aramirezamdo1992@gmail.com", "Amado", "Rafael", "Ramírez", "López", "Amado Rafael Ramírez López", "Working02026.com", "SUPER_ADMIN");
         }
 
         public static void CreateTenants(ApplicationDbContext context)
