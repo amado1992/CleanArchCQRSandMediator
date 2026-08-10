@@ -47,20 +47,7 @@ namespace CleanArchCQRSandMediator.infra.Authorization
                 return;
             }
 
-            // Get the user tenant from the claim or from the header
-            var tenantId = context.User.FindFirst("tenant_id")?.Value;
-            if (string.IsNullOrEmpty(tenantId) || !Guid.TryParse(tenantId, out var tenantGuid))
-            {
-                // If there is no tenant, try to obtain it from the header (fallback)
-                tenantId = _httpContextAccessor.HttpContext?.Request.Headers["X-TenantId"].ToString();
-                if (string.IsNullOrEmpty(tenantId) || !Guid.TryParse(tenantId, out tenantGuid))
-                {
-                    context.Fail();
-                    return;
-                }
-            }
-
-            // 1. Verify if the user is an administrator (permissions can be bypassed)
+            // 1. Verify if the user is an super administrator (permissions can be bypassed)
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
             {
@@ -68,20 +55,32 @@ namespace CleanArchCQRSandMediator.infra.Authorization
                 return;
             }
 
-            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-            if (isAdmin)
+            var isSuperAdmin = await _userManager.IsInRoleAsync(user, "Super administrador");
+            if (isSuperAdmin)
             {
                 context.Succeed(requirement);
                 return;
             }
 
-            // 2. Verify direct user permissions (from AspNetUserClaims)
+            // 2. Verify tenant
+            var tenantIds = await _context.ApplicationUserTenant
+                .Where(x => x.ApplicationUserId == int.Parse(userId))
+                .Select(uc => uc.TenantId)
+                .ToListAsync();
+            
+            if (tenantIds.Count == 0)
+            {
+                context.Fail();
+                return;
+            }
+
+            // 3. Verify direct user permissions (from AspNetUserClaims)
             var userPermissions = await _context.UserClaims
                 .Where(uc => uc.UserId == userInt && uc.ClaimType == "permission")
                 .Select(uc => uc.ClaimValue)
                 .ToListAsync();
 
-            // 3. Verify user role permissions (from AspNetRoleClaims)
+            // 4. Verify user role permissions (from AspNetRoleClaims)
 
             // Get the user role IDs
             var userRoleNames = await _userManager.GetRolesAsync(user);

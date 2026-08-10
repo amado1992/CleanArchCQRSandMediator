@@ -16,8 +16,8 @@ namespace CleanArchCQRSandMediator.API.Controllers
     {
         [HttpGet]
         // [Authorize(Roles = "Super administrador")]
-        [Authorize(Roles = "Dueño")]
-        // [PermissionAuthorize(PermissionAction.View, "articles")]
+        // [Authorize(Roles = "Dueño")]
+        [PermissionAuthorize(PermissionAction.View, "articles")]
         public async Task<IActionResult> GetAllAsync()
         {
             var blogs = await Mediator.Send(new GetBlogQuery());

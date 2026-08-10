@@ -14,5 +14,6 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business
         public string Address { get; set; } = string.Empty;
         public int TenantId { get; set; }
         public Tenant Tenant { get; set; } = null!;
+        public List<Purchase> Purchases { get; } = [];
     }
 }
