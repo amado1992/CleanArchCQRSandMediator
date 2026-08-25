@@ -247,6 +247,75 @@ namespace CleanArchCQRSandMediator.infra.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ApplicationUserCreatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ApplicationUserUpdaterId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CellPhone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("WhatsApp")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserCreatorId");
+
+                    b.HasIndex("ApplicationUserUpdaterId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Employee");
+                });
+
             modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Module", b =>
                 {
                     b.Property<int>("Id")
@@ -266,6 +335,32 @@ namespace CleanArchCQRSandMediator.infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Modules");
+                });
+
+            modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.PaymentMethod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentMethod");
                 });
 
             modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Permission", b =>
@@ -476,6 +571,15 @@ namespace CleanArchCQRSandMediator.infra.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ApplicationUserCreatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ApplicationUserUpdaterId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("BranchOfficeId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("text");
@@ -489,6 +593,18 @@ namespace CleanArchCQRSandMediator.infra.Migrations
                     b.Property<DateTime>("DatePurchase")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Observation")
+                        .HasColumnType("text");
+
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProviderId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("TenantId")
                         .HasColumnType("integer");
 
@@ -497,7 +613,19 @@ namespace CleanArchCQRSandMediator.infra.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserCreatorId");
+
+                    b.HasIndex("ApplicationUserUpdaterId");
+
+                    b.HasIndex("BranchOfficeId");
+
                     b.HasIndex("CurrencyId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.HasIndex("ProviderId");
 
                     b.HasIndex("TenantId");
 
@@ -628,6 +756,10 @@ namespace CleanArchCQRSandMediator.infra.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("FirstSurname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -638,10 +770,6 @@ namespace CleanArchCQRSandMediator.infra.Migrations
                     b.Property<DateTime?>("LastLoginAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 
@@ -649,7 +777,6 @@ namespace CleanArchCQRSandMediator.infra.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MiddleName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("NormalizedEmail")
@@ -668,6 +795,10 @@ namespace CleanArchCQRSandMediator.infra.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("SecondSurname")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
@@ -854,6 +985,31 @@ namespace CleanArchCQRSandMediator.infra.Migrations
                     b.Navigation("Tenant");
                 });
 
+            modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Employee", b =>
+                {
+                    b.HasOne("CleanArchCQRSandMediator.Domain.Entities.Identity.ApplicationUser", "ApplicationUserCreator")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserCreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchCQRSandMediator.Domain.Entities.Identity.ApplicationUser", "ApplicationUserUpdater")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserUpdaterId");
+
+                    b.HasOne("CleanArchCQRSandMediator.Domain.Entities.Business.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUserCreator");
+
+                    b.Navigation("ApplicationUserUpdater");
+
+                    b.Navigation("Tenant");
+                });
+
             modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Permission", b =>
                 {
                     b.HasOne("CleanArchCQRSandMediator.Domain.Entities.Business.Action", "Action")
@@ -934,9 +1090,43 @@ namespace CleanArchCQRSandMediator.infra.Migrations
 
             modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Purchase", b =>
                 {
+                    b.HasOne("CleanArchCQRSandMediator.Domain.Entities.Identity.ApplicationUser", "ApplicationUserCreator")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserCreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchCQRSandMediator.Domain.Entities.Identity.ApplicationUser", "ApplicationUserUpdater")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserUpdaterId");
+
+                    b.HasOne("CleanArchCQRSandMediator.Domain.Entities.Business.BranchOffice", "BranchOffice")
+                        .WithMany("Purchases")
+                        .HasForeignKey("BranchOfficeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CleanArchCQRSandMediator.Domain.Entities.Business.Currency", "Currency")
                         .WithMany("Purchases")
                         .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchCQRSandMediator.Domain.Entities.Business.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchCQRSandMediator.Domain.Entities.Business.PaymentMethod", "PaymentMethod")
+                        .WithMany("Purchases")
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchCQRSandMediator.Domain.Entities.Business.Provider", "Provider")
+                        .WithMany("Purchases")
+                        .HasForeignKey("ProviderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -946,7 +1136,19 @@ namespace CleanArchCQRSandMediator.infra.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("ApplicationUserCreator");
+
+                    b.Navigation("ApplicationUserUpdater");
+
+                    b.Navigation("BranchOffice");
+
                     b.Navigation("Currency");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("PaymentMethod");
+
+                    b.Navigation("Provider");
 
                     b.Navigation("Tenant");
                 });
@@ -1018,6 +1220,11 @@ namespace CleanArchCQRSandMediator.infra.Migrations
                     b.Navigation("Permissions");
                 });
 
+            modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.BranchOffice", b =>
+                {
+                    b.Navigation("Purchases");
+                });
+
             modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Currency", b =>
                 {
                     b.Navigation("Purchases");
@@ -1026,6 +1233,11 @@ namespace CleanArchCQRSandMediator.infra.Migrations
             modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Module", b =>
                 {
                     b.Navigation("Permissions");
+                });
+
+            modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.PaymentMethod", b =>
+                {
+                    b.Navigation("Purchases");
                 });
 
             modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Permission", b =>
@@ -1041,6 +1253,11 @@ namespace CleanArchCQRSandMediator.infra.Migrations
             modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Product.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Provider", b =>
+                {
+                    b.Navigation("Purchases");
                 });
 
             modelBuilder.Entity("CleanArchCQRSandMediator.Domain.Entities.Business.Tenant", b =>
