@@ -1,3 +1,4 @@
+using CleanArchCQRSandMediator.API.Middleware;
 using CleanArchCQRSandMediator.Application;
 using CleanArchCQRSandMediator.Application.Common.Configurations;
 using CleanArchCQRSandMediator.Application.Common.Interfaces;
@@ -157,6 +158,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAngularApp");
 app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
