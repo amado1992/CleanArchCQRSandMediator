@@ -11,11 +11,50 @@ using CleanArchCQRSandMediator.infra.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Globalization;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Location services
+builder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Resources";
+});
+
+// Supported languages
+var supportedCultures = new[]
+{
+    new CultureInfo("es"),
+    new CultureInfo("es-ES"),
+    new CultureInfo("es-MX"),
+    new CultureInfo("en"),
+    new CultureInfo("en-US"),
+    new CultureInfo("en-GB")
+};
+
+// Configure RequestLocalizationOptions
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("es");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+
+    // Suppliers in order of priority
+    options.RequestCultureProviders.Clear();
+    options.RequestCultureProviders.Add(new QueryStringRequestCultureProvider
+    {
+        QueryStringKey = "lang"  // ?lang=es
+    });
+    options.RequestCultureProviders.Add(new CookieRequestCultureProvider
+    {
+        CookieName = ".AspNetCore.Culture"
+    });
+    options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
+});
 
 // Add services to the container.
 
@@ -89,8 +128,9 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Controllers
-builder.Services.AddControllers();
+// Controllers with localization support in validations
+builder.Services.AddControllers()
+    .AddDataAnnotationsLocalization(); // For translations of validation messages
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -123,6 +163,10 @@ builder.Services.AddSwaggerGen(c =>
 // builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+// Localization middleware (detects language based on request)
+app.UseRequestLocalization();
+app.UseMiddleware<LanguageMiddleware>();
 
 // Data initialization (SEED)
 using (var scope = app.Services.CreateScope())

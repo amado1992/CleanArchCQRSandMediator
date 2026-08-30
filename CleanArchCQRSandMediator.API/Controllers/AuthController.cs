@@ -5,7 +5,7 @@ using CleanArchCQRSandMediator.Application.Auth.Commands.Register;
 using CleanArchCQRSandMediator.Application.Dtos.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using Microsoft.Extensions.Localization;
 
 namespace CleanArchCQRSandMediator.API.Controllers
 {
@@ -13,6 +13,13 @@ namespace CleanArchCQRSandMediator.API.Controllers
     [ApiController]
     public class AuthController : ApiControllerBase
     {
+        private readonly IStringLocalizer<SharedResources> _localizer;
+
+        public AuthController(IStringLocalizer<SharedResources> localizer)
+        {
+            _localizer = localizer;
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login(LoginCommand command)
         {
@@ -40,8 +47,9 @@ namespace CleanArchCQRSandMediator.API.Controllers
         [Authorize]
         public async Task<IActionResult> Logout(LogoutCommand command)
         {
+            var message = _localizer["SessionSuccessfullyClosed"].Value;
             await Mediator.Send(command);
-            return Ok(new { message = "Session successfully closed" });
+            return Ok(new { message = message });
         }
     }
 }

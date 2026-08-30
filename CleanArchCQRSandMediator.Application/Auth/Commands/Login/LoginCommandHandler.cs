@@ -4,7 +4,7 @@ using CleanArchCQRSandMediator.Application.Dtos.Auth;
 using CleanArchCQRSandMediator.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Localization;
 
 namespace CleanArchCQRSandMediator.Application.Auth.Commands.Login
 {
@@ -15,21 +15,26 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Login
         private readonly JwtSettings _jwtSettings;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IApplicationDbContext _context;
+        private readonly IStringLocalizer<SharedResources> _localizer;
 
-        public LoginCommandHandler(ITokenService tokenService, JwtSettings jwtSettings, UserManager<ApplicationUser> userManager, IApplicationDbContext context, IJwtService jwtService)
+        public LoginCommandHandler(ITokenService tokenService, JwtSettings jwtSettings, UserManager<ApplicationUser> userManager, IApplicationDbContext context, IJwtService jwtService, IStringLocalizer<SharedResources> localizer)
         {
             _tokenService = tokenService;
             _jwtSettings = jwtSettings;
             _userManager = userManager;
             _context = context;
             _jwtService = jwtService;
+            _localizer = localizer;
         }
 
         public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
-                throw new UnauthorizedAccessException("Invalid credentials");
+            {
+                var invalidCredentials = _localizer["InvalidCredentials"].Value; 
+                throw new UnauthorizedAccessException(invalidCredentials);
+            }
 
             if (!user.IsActive)
                 throw new UnauthorizedAccessException("User deactivated");
