@@ -1,12 +1,13 @@
 ﻿using CleanArchCQRSandMediator.Application.Common.Exceptions;
 using CleanArchCQRSandMediator.Application.Common.Interfaces;
+using CleanArchCQRSandMediator.Application.Dtos.Permissions;
 using CleanArchCQRSandMediator.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace CleanArchCQRSandMediator.Application.Permissions.Queries.GetUserUnifiedPermissionsQuery
 {
-    public class GetUserUnifiedPermissionsQueryHandler : IRequestHandler<GetUserUnifiedPermissionsQuery, IList<string>>
+    public class GetUserUnifiedPermissionsQueryHandler : IRequestHandler<GetUserUnifiedPermissionsQuery, PermissionsResponse>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
@@ -25,7 +26,7 @@ namespace CleanArchCQRSandMediator.Application.Permissions.Queries.GetUserUnifie
             _currentUserService = currentUserService;
         }
 
-        public async Task<IList<string>> Handle(GetUserUnifiedPermissionsQuery request, CancellationToken cancellationToken)
+        public async Task<PermissionsResponse> Handle(GetUserUnifiedPermissionsQuery request, CancellationToken cancellationToken)
         {
             // 1. Get the user
             var userId = _currentUserService.GetUserId();
@@ -58,8 +59,10 @@ namespace CleanArchCQRSandMediator.Application.Permissions.Queries.GetUserUnifie
                 }
             }
 
-            // 6. Return as a list
-            return permissionsSet.ToList();
+            return new PermissionsResponse
+            {
+                Permissions = permissionsSet.ToList()
+            };
         }
     }
 }

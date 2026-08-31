@@ -1,4 +1,5 @@
-﻿using CleanArchCQRSandMediator.Application.Permissions.Commands.AssignPermissionsToRole;
+﻿using CleanArchCQRSandMediator.Application.Dtos.Permissions;
+using CleanArchCQRSandMediator.Application.Permissions.Commands.AssignPermissionsToRole;
 using CleanArchCQRSandMediator.Application.Permissions.Commands.AssignPermissionToUser;
 using CleanArchCQRSandMediator.Application.Permissions.Queries.GetUserUnifiedPermissionsQuery;
 using Microsoft.AspNetCore.Authorization;
@@ -36,7 +37,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("user-permissions")]
-        public async Task<ActionResult<IList<string>>> GetUserUnifiedPermissions()
+        public async Task<ActionResult<PermissionsResponse>> GetUserUnifiedPermissions()
         {
             var permissions = await Mediator.Send(new GetUserUnifiedPermissionsQuery());
             return Ok(permissions);
