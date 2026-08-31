@@ -6,16 +6,16 @@ using System.Security.Claims;
 
 namespace CleanArchCQRSandMediator.Application.Permissions.Commands.AssignPermissionToUser
 {
-    public class AssignPermissionToUserCommandHandler : IRequestHandler<AssignPermissionToUserCommand>
+    public class AssignPermissionsToUserCommandHandler : IRequestHandler<AssignPermissionsToUserCommand>
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AssignPermissionToUserCommandHandler(UserManager<ApplicationUser> userManager)
+        public AssignPermissionsToUserCommandHandler(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
 
-        public async Task Handle(AssignPermissionToUserCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AssignPermissionsToUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             if (user == null)
