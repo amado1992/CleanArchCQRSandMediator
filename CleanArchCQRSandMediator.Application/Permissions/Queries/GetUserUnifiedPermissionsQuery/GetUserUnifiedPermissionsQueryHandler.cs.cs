@@ -11,18 +11,15 @@ namespace CleanArchCQRSandMediator.Application.Permissions.Queries.GetUserUnifie
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
-        private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentUserService;
 
         public GetUserUnifiedPermissionsQueryHandler(
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
-            IApplicationDbContext context,
             ICurrentUserService currentUserService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _context = context;
             _currentUserService = currentUserService;
         }
 

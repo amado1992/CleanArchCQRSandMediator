@@ -20,6 +20,16 @@ public class ExceptionHandlingMiddleware
         try
         {
             await _next(context);
+
+            // If there was no exception but the status code is 401 or 403, we customized the response
+            if (context.Response.StatusCode == StatusCodes.Status401Unauthorized)
+            {
+                await WriteUnauthorizedResponse(context);
+            }
+            else if (context.Response.StatusCode == StatusCodes.Status403Forbidden)
+            {
+                await WriteForbiddenResponse(context);
+            }
         }
         catch (Exception ex)
         {
@@ -82,6 +92,40 @@ public class ExceptionHandlingMiddleware
             title = statusCode.ToString(),
             detail = message,
             errors = details
+        };
+
+        var json = JsonSerializer.Serialize(response);
+        await context.Response.WriteAsync(json);
+    }
+
+    private async Task WriteUnauthorizedResponse(HttpContext context)
+    {
+        // We didn't change the status code (it's already 401)
+        context.Response.ContentType = "application/json";
+
+        var response = new
+        {
+            status = StatusCodes.Status401Unauthorized,
+            title = "Unauthorized",
+            detail = "Unauthenticated user or invalid ID.",
+            errors = (object?)null
+        };
+
+        var json = JsonSerializer.Serialize(response);
+        await context.Response.WriteAsync(json);
+    }
+
+    private async Task WriteForbiddenResponse(HttpContext context)
+    {
+        // We didn't change the status code (it's already 403)
+        context.Response.ContentType = "application/json";
+
+        var response = new
+        {
+            status = StatusCodes.Status403Forbidden,
+            title = "Forbidden",
+            detail = "You do not have permission to access this resource.",
+            errors = (object?)null
         };
 
         var json = JsonSerializer.Serialize(response);
