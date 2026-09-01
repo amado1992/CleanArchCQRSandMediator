@@ -6,7 +6,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RolesController : ApiControllerBase
+    public class RoleController : ApiControllerBase
     {
         /// <summary>
         /// Retrieves the roles of a specific user
