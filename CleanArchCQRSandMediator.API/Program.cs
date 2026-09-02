@@ -49,11 +49,6 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     {
         QueryStringKey = "lang"  // ?lang=es
     });
-    options.RequestCultureProviders.Add(new CookieRequestCultureProvider
-    {
-        CookieName = ".AspNetCore.Culture"
-    });
-    options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
 });
 
 // Add services to the container.
