@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchCQRSandMediator.infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260822093739_Initial")]
+    [Migration("20260910130920_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -741,6 +741,13 @@ namespace CleanArchCQRSandMediator.infra.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CellPhone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
@@ -806,12 +813,19 @@ namespace CleanArchCQRSandMediator.infra.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
+                    b.Property<string>("Sex")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
+
+                    b.Property<string>("WhatsApp")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

@@ -6,7 +6,7 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Login
     {
         public LoginCommandValidator()
         {
-            RuleFor(x => x.Email).NotEmpty().EmailAddress();
+            RuleFor(x => x.Identifier).NotEmpty();
             RuleFor(x => x.Password).NotEmpty().MinimumLength(6);
         }
     }

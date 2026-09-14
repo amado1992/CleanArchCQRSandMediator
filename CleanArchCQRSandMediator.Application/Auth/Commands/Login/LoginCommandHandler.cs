@@ -29,7 +29,18 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Login
 
         public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            ApplicationUser? user = null;
+            
+            // If @ is email, sin @ is username
+            if (request.Identifier.Contains('@'))
+            {
+                user = await _userManager.FindByEmailAsync(request.Identifier);
+            }
+            else
+            {
+                user = await _userManager.FindByNameAsync(request.Identifier);
+            }
+            
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
                 var invalidCredentials = _localizer["InvalidCredentials"].Value; 
@@ -64,7 +75,8 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Login
             await _context.SaveChangesAsync();
 
             // Update last login
-            // user.LastLoginAt = DateTime.UtcNow;
+            user.LastLoginAt = DateTime.UtcNow;
+            await _userManager.UpdateAsync(user);
 
             return new LoginResponse
             {

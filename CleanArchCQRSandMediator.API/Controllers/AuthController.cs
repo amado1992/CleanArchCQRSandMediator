@@ -50,6 +50,6 @@ namespace CleanArchCQRSandMediator.API.Controllers
             var message = _localizer["SessionSuccessfullyClosed"].Value;
             await Mediator.Send(command);
             return Ok(new { message = message });
-        }
+        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
     }
 }

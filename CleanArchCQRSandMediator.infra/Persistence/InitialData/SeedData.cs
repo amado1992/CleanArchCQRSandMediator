@@ -1,5 +1,6 @@
 ﻿using CleanArchCQRSandMediator.Domain.Entities.Business;
 using CleanArchCQRSandMediator.Domain.Entities.Identity;
+using CleanArchCQRSandMediator.Domain.Enums;
 using CleanArchCQRSandMediator.infra.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -68,6 +69,7 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
             {
                 new
                 {
+                    UserName = "cxprodus",
                     Email = "aramirezamdo1992@gmail.com",
                     FirstName = "Amado",
                     MiddleName = "Rafael",
@@ -75,7 +77,9 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
                     SecondSurname = "López",
                     FullName = "Amado Rafael Ramírez López",
                     Password = "Working02026.com",
-                    RoleNormalizedName = "SUPER ADMINISTRADOR"
+                    RoleNormalizedName = "SUPER ADMINISTRADOR",
+                    CellPhone = "+53-59153863",
+                    Sex = Sex.Male
                 }
             };
 
@@ -86,13 +90,15 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
 
                 var user = new ApplicationUser
                 {
-                    UserName = userData.Email,
+                    UserName = userData.UserName,
                     Email = userData.Email,
                     FirstName = userData.FirstName,
                     MiddleName = userData.MiddleName,
                     FirstSurname = userData.FirstSurname,
                     SecondSurname = userData.SecondSurname,
                     FullName = userData.FullName,
+                    CellPhone = userData.CellPhone,
+                    Sex = userData.Sex,
                     EmailConfirmed = true,
                     LockoutEnabled = false,
                     IsActive = true,

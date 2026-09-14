@@ -26,7 +26,8 @@ public class ExceptionHandlingMiddleware
             {
                 await WriteUnauthorizedResponse(context);
             }
-            else if (context.Response.StatusCode == StatusCodes.Status403Forbidden)
+
+            if (context.Response.StatusCode == StatusCodes.Status403Forbidden)
             {
                 await WriteForbiddenResponse(context);
             }
@@ -49,6 +50,16 @@ public class ExceptionHandlingMiddleware
                 statusCode = HttpStatusCode.BadRequest; // 400
                 message = "Validation error";
                 details = validationEx.Errors;
+                break;
+
+            case IdentityException identityEx:
+                statusCode = HttpStatusCode.BadRequest; // 400
+                message = identityEx.Message;
+                details = identityEx.Errors.Select(e => new
+                {
+                    code = e.Code,
+                    description = e.Code
+                });
                 break;
 
             case UnauthorizedException:
