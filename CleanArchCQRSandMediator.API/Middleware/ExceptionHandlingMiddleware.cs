@@ -9,6 +9,12 @@ public class ExceptionHandlingMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+    };
+
     public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
     {
         _next = next;
@@ -17,23 +23,62 @@ public class ExceptionHandlingMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
+        // Interceptar el body de la respuesta
+        var originalBodyStream = context.Response.Body;
+        using var responseBody = new MemoryStream();
+        context.Response.Body = responseBody;
+
         try
         {
             await _next(context);
 
-            // If there was no exception but the status code is 401 or 403, we customized the response
-            if (context.Response.StatusCode == StatusCodes.Status401Unauthorized)
+            // Si ya empezó a enviarse, no se puede modificar
+            if (context.Response.HasStarted)
             {
-                await WriteUnauthorizedResponse(context);
+                responseBody.Seek(0, SeekOrigin.Begin);
+                await responseBody.CopyToAsync(originalBodyStream);
+                return;
             }
 
-            if (context.Response.StatusCode == StatusCodes.Status403Forbidden)
+            // Leer el body capturado
+            responseBody.Seek(0, SeekOrigin.Begin);
+            var bodyText = await new StreamReader(responseBody).ReadToEndAsync();
+
+            // CRÍTICO: restaurar el stream ANTES de escribir
+            context.Response.Body = originalBodyStream;
+
+            // CRÍTICO: resetear ContentLength (ASP.NET Core lo seteó al escribir en el MemoryStream)
+            context.Response.ContentLength = null;
+
+            switch (context.Response.StatusCode)
             {
-                await WriteForbiddenResponse(context);
+                case StatusCodes.Status400BadRequest:
+                    await WriteBadRequestResponse(context, bodyText);
+                    break;
+
+                case StatusCodes.Status401Unauthorized:
+                    await WriteUnauthorizedResponse(context);
+                    break;
+
+                case StatusCodes.Status403Forbidden:
+                    await WriteForbiddenResponse(context);
+                    break;
+
+                default:
+                    // Copiar la respuesta original tal cual
+                    if (!string.IsNullOrWhiteSpace(bodyText))
+                    {
+                        await context.Response.WriteAsync(bodyText);
+                    }
+                    break;
             }
         }
         catch (Exception ex)
         {
+            // Restaurar stream también aquí
+            context.Response.Body = originalBodyStream;
+            context.Response.ContentLength = null;
+
             await HandleExceptionAsync(context, ex);
         }
     }
@@ -140,6 +185,80 @@ public class ExceptionHandlingMiddleware
         };
 
         var json = JsonSerializer.Serialize(response);
+        await context.Response.WriteAsync(json);
+    }
+
+    // ============================================
+    // 400 — ProblemDetails de ASP.NET Core
+    // ============================================
+    private async Task WriteBadRequestResponse(HttpContext context, string originalBody)
+    {
+        string message = "One or more validation errors occurred.";
+        object? errors = null;
+
+        try
+        {
+            using var doc = JsonDocument.Parse(originalBody);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("detail", out var detailProp) &&
+                detailProp.ValueKind == JsonValueKind.String)
+            {
+                message = detailProp.GetString() ?? message;
+            }
+            else if (root.TryGetProperty("title", out var titleProp) &&
+                     titleProp.ValueKind == JsonValueKind.String)
+            {
+                message = titleProp.GetString() ?? message;
+            }
+
+            // Transformar "errors" de objeto → array plano [{ field, message }]
+            if (root.TryGetProperty("errors", out var errorsProp) &&
+                errorsProp.ValueKind == JsonValueKind.Object)
+            {
+                var list = new List<object>();
+                foreach (var prop in errorsProp.EnumerateObject())
+                {
+                    if (prop.Value.ValueKind == JsonValueKind.Array)
+                    {
+                        foreach (var err in prop.Value.EnumerateArray())
+                        {
+                            list.Add(new
+                            {
+                                field = prop.Name,
+                                message = err.GetString() ?? "Invalid value"
+                            });
+                        }
+                    }
+                    else if (prop.Value.ValueKind == JsonValueKind.String)
+                    {
+                        list.Add(new
+                        {
+                            field = prop.Name,
+                            message = prop.Value.GetString() ?? "Invalid value"
+                        });
+                    }
+                }
+                errors = list;
+            }
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogWarning(ex, "No se pudo parsear el body del 400 como JSON.");
+        }
+
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+        var response = new
+        {
+            status = StatusCodes.Status400BadRequest,
+            title = "BadRequest",
+            detail = message,
+            errors
+        };
+
+        var json = JsonSerializer.Serialize(response, JsonOptions);
         await context.Response.WriteAsync(json);
     }
 }
