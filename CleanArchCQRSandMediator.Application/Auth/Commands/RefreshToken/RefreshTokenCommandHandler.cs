@@ -35,7 +35,7 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken
 
             var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
-                throw new NotFoundException($"User ID Claim {userIdClaim} not found");
+                throw new UnauthorizedException("The user could not be identified. Please log in again.");
 
             var user = await _userManager.FindByIdAsync(userId.ToString());
 

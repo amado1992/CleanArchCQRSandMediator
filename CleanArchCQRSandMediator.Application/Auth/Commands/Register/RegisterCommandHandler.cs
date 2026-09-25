@@ -34,15 +34,15 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Register
 
             // Verify that the username does not exist.
             if (await _userManager.FindByNameAsync(userName) != null)
-                throw new ConflictException($"The username '{userName}' it is already in use.");
+                throw new ConflictException("The username it is already in use.");
 
             // Verify that the email does not exist.
             if (await _userManager.FindByEmailAsync(email) != null)
-                throw new ConflictException($"The email '{email}' it is already registered.");
+                throw new ConflictException("The email it is already registered.");
 
             IEnumerable<int> tenantIds = request.TenantIds;
             var tenants = _context.Tenants.Where(x => !tenantIds.Contains(x.Id)).ToList();
-            if (tenants.Count() > 0) throw new NotFoundException(nameof(Tenant), "Id");
+            if (tenants.Count() == 0) throw new NotFoundException("The organization was not found.");
 
             var user = new ApplicationUser
             {

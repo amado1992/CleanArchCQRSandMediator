@@ -1,4 +1,5 @@
-﻿using CleanArchCQRSandMediator.Application.Common.Interfaces;
+﻿using CleanArchCQRSandMediator.Application.Common.Exceptions;
+using CleanArchCQRSandMediator.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,15 +27,15 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Logout
 
             // Find the refresh token that matches the token and the userId
             var refreshTokenEntity = await _context.RefreshTokens
-                .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken 
+                .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken
                                         && rt.ApplicationUserId == userId
                                         && rt.JwtId == jwtId, cancellationToken);
 
-            if (refreshTokenEntity != null)
-            {
-                refreshTokenEntity.IsRevoked = true;
-                await _context.SaveChangesAsync(cancellationToken);
-            }
+            if (refreshTokenEntity == null)
+                throw new NotFoundException("Refresh token not found.");
+
+            refreshTokenEntity.IsRevoked = true;
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }
