@@ -8,5 +8,6 @@
         public IList<string> GetRoles();
         public bool IsAuthenticated();
         public bool HasRole(string roleName);
+        string? GetAccessToken();
     }
 }

@@ -44,5 +44,14 @@ namespace CleanArchCQRSandMediator.infra.Services
         {
             return _httpContextAccessor.HttpContext?.User?.IsInRole(roleName) ?? false;
         }
+
+        public string? GetAccessToken()
+        {
+            var authHeader = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                return null;
+
+            return authHeader.Substring("Bearer ".Length).Trim();
+        }
     }
 }

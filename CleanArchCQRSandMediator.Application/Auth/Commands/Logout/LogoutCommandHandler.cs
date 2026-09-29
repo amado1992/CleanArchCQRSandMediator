@@ -20,19 +20,28 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Logout
 
         public async Task Handle(LogoutCommand request, CancellationToken cancellationToken)
         {
-            // The handler obtains the userId from the current user service
+            // 1. Get the userId from the token (already authenticated)
             var userId = _currentUserService.GetUserId();
 
-            var jwtId = _jwtService.GetJtiFromToken(request.AccessToken);
+            // 2. Obtain the access token from the Authorization header.
+            var accessToken = _currentUserService.GetAccessToken();
+            if (string.IsNullOrEmpty(accessToken))
+                return;
 
-            // Find the refresh token that matches the token and the userId
+            // 3. Extract the jti from the access token
+            var jwtId = _jwtService.GetJtiFromToken(accessToken);
+            if (string.IsNullOrEmpty(jwtId))
+                return;
+
+            // 4. Look up the refresh token associated with the user and the access token's JTI.
             var refreshTokenEntity = await _context.RefreshTokens
-                .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken
-                                        && rt.ApplicationUserId == userId
-                                        && rt.JwtId == jwtId, cancellationToken);
+                .FirstOrDefaultAsync(rt => rt.ApplicationUserId == userId
+                                        && rt.JwtId == jwtId
+                                        && !rt.IsRevoked, cancellationToken);
 
+            // 5. If it doesn't exist, we do nothing (successful logout)
             if (refreshTokenEntity == null)
-                throw new NotFoundException("Refresh token not found.");
+                return;
 
             refreshTokenEntity.IsRevoked = true;
             await _context.SaveChangesAsync(cancellationToken);

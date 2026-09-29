@@ -18,21 +18,26 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken
         private readonly JwtSettings _jwtSettings;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IApplicationDbContext _context;
+        private readonly ICurrentUserService _currentUserService;
 
 
-        public RefreshTokenCommandHandler(ITokenService tokenService, JwtSettings jwtSettings, UserManager<ApplicationUser> userManager, IApplicationDbContext context, IJwtService jwtService)
+        public RefreshTokenCommandHandler(ITokenService tokenService, JwtSettings jwtSettings, UserManager<ApplicationUser> userManager, IApplicationDbContext context, IJwtService jwtService, ICurrentUserService currentUserService)
         {
             _tokenService = tokenService;
             _jwtSettings = jwtSettings;
             _userManager = userManager;
             _context = context;
             _jwtService = jwtService;
+            _currentUserService = currentUserService;
         }
 
         public async Task<LoginResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            var principal = _tokenService.GetPrincipalFromExpiredToken(request.AccessToken);
+            var accessToken = _currentUserService.GetAccessToken();
+            if (string.IsNullOrEmpty(accessToken))
+                throw new UnauthorizedException("Access token not found.");
 
+            var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
             var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
                 throw new UnauthorizedException("The user could not be identified. Please log in again.");
@@ -42,7 +47,7 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken
             if (user == null)
                 throw new NotFoundException(nameof(ApplicationUser), userId);
 
-            var jwtId = _jwtService.GetJtiFromToken(request.AccessToken);
+            var jwtId = _jwtService.GetJtiFromToken(accessToken);
             var storedRefreshToken = await _context.RefreshTokens
                 .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken
                                         && rt.ApplicationUserId == userId
