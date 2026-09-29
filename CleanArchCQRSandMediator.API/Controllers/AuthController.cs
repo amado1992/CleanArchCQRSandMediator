@@ -21,6 +21,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<LoginResponse>> Login(LoginCommand command)
         {
             var response = await Mediator.Send(command);
@@ -37,6 +38,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         }
 
         [HttpPost("refresh-token")]
+        [AllowAnonymous]
         public async Task<ActionResult<LoginResponse>> Refresh(RefreshTokenCommand command)
         {
             var response = await Mediator.Send(command);
@@ -45,10 +47,10 @@ namespace CleanArchCQRSandMediator.API.Controllers
 
         [HttpPost("logout")]
         [Authorize]
-        public async Task<IActionResult> Logout(LogoutCommand command)
+        public async Task<IActionResult> Logout()
         {
             var message = _localizer["SessionSuccessfullyClosed"].Value;
-            await Mediator.Send(command);
+            await Mediator.Send(new LogoutCommand());
             return Ok(new { message = message });
         }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
     }

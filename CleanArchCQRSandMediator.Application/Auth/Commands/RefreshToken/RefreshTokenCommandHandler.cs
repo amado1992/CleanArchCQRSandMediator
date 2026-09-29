@@ -33,10 +33,7 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken
 
         public async Task<LoginResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            var accessToken = _currentUserService.GetAccessToken();
-            if (string.IsNullOrEmpty(accessToken))
-                throw new UnauthorizedException("Access token not found.");
-
+            var accessToken = request.AccessToken;
             var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
             var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
@@ -45,7 +42,7 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.RefreshToken
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
             if (user == null)
-                throw new NotFoundException(nameof(ApplicationUser), userId);
+                throw new NotFoundException("The user was not found. Please log in again.");
 
             var jwtId = _jwtService.GetJtiFromToken(accessToken);
             var storedRefreshToken = await _context.RefreshTokens

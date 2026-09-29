@@ -54,7 +54,12 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 // Add services to the container.
 
 // Load the configuration section and map it to the JwtSettings class
-var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()
+    ?? throw new InvalidOperationException("The 'JwtSettings' section does not exist in the configuration.");
+
+if (string.IsNullOrEmpty(jwtSettings.Secret))
+    throw new InvalidOperationException("The 'Secret' key is mandatory in JwtSettings.");
+
 builder.Services.AddSingleton(jwtSettings!);
 
 // Add layer dependency
