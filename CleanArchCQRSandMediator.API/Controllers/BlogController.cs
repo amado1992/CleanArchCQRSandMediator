@@ -25,7 +25,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetBlogById")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
             var blog = await Mediator.Send(new GetBlogByIdQuery() { BlogId = id });
 
@@ -36,11 +36,11 @@ namespace CleanArchCQRSandMediator.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(CreateBlogCommand command)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateBlogCommand command)
         {
             var createBlog = await Mediator.Send(command);
 
-            // return CreatedAtAction(nameof(GetByIdAsync), new { id = createBlog.Id }, createBlog);
+            // return CreatedAtAction(nameof(GetById), new { id = createBlog.Id }, createBlog);
             return CreatedAtRoute("GetBlogById", new { id = createBlog.Id }, createBlog);
         }
         /// <summary>
@@ -69,7 +69,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         /// Tracked entity (recommended)
         /// </summary>
         [HttpPut]
-        public async Task<ActionResult<BlogVm>> UpdateAsync(UpdateBlogCommand command)
+        public async Task<ActionResult<BlogVm>> UpdateAsync([FromBody] UpdateBlogCommand command)
         {
             var updatedBlog = await Mediator.Send(command);
             return Ok(updatedBlog);
@@ -97,7 +97,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<int>> DeleteAsync(int id)
+        public async Task<ActionResult<int>> DeleteAsync([FromRoute] int id)
         {
             var deleteBlog = await Mediator.Send(new DeleteBlogCommand() { Id = id });
             return Ok(deleteBlog);

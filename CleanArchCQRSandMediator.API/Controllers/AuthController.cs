@@ -22,7 +22,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<LoginResponse>> Login(LoginCommand command)
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginCommand command)
         {
             var response = await Mediator.Send(command);
             return Ok(response);
@@ -31,7 +31,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         [HttpPost("register")]
         // [Authorize(Roles = "Super administrador")]
         [AllowAnonymous]
-        public async Task<ActionResult<int>> Register(RegisterCommand command)
+        public async Task<ActionResult<int>> Register([FromBody] RegisterCommand command)
         {
             var userId = await Mediator.Send(command);
             return Ok(userId);
@@ -39,7 +39,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
 
         [HttpPost("refresh-token")]
         [AllowAnonymous]
-        public async Task<ActionResult<LoginResponse>> Refresh(RefreshTokenCommand command)
+        public async Task<ActionResult<LoginResponse>> Refresh([FromBody] RefreshTokenCommand command)
         {
             var response = await Mediator.Send(command);
             return Ok(response);

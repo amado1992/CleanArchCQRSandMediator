@@ -40,7 +40,7 @@ namespace CleanArchCQRSandMediator.Application.Blogs.Commands.DeleteBlog
             _context.Blogs.Remove(blog);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return request.Id; // o 0, o void
+            return request.Id;
         }
     }
 }
