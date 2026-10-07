@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\Organizations\Commands\CreateOrganization\CreateOrganizationCommandValidator.es.resx~RF93099a.TMP" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="16.1.1" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
@@ -19,6 +23,11 @@
   </ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Resources\Organizations\Commands\CreateOrganization\CreateOrganizationCommandValidator.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>CreateOrganizationCommandValidator.resx</DependentUpon>
+	  </Compile>
 	  <Compile Update="Resources\SharedResources.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -27,6 +36,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <EmbeddedResource Update="Resources\Organizations\Commands\CreateOrganization\CreateOrganizationCommandValidator.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>CreateOrganizationCommandValidator.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\SharedResources.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
