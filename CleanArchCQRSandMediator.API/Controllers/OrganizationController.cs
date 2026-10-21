@@ -16,7 +16,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
     public class OrganizationController : ApiControllerBase
     {
         [HttpPost]
-        // [PermissionAuthorize(PermissionAction.Create, "Organizations")]
+        // [PermissionAuthorize(PermissionAction.Create, "Organization")]
         public async Task<IActionResult> CreateAsync([FromBody] CreateOrganizationCommand command)
         {
             var id = await Mediator.Send(command);
@@ -28,7 +28,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         /// </summary>
         /// <param name="id">Organization ID</param>
         [HttpGet("{id}", Name = "GetOrganizationById")]
-        // [PermissionAuthorize(PermissionAction.View, "Organizations")]
+        // [PermissionAuthorize(PermissionAction.View, "Organization")]
         public async Task<ActionResult<OrganizationDto>> GetByIdAsync([FromRoute] int id)
         {
             var organization = await Mediator.Send(new GetOrganizationByIdQuery { OrganizationId = id });
@@ -41,7 +41,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         /// <param name="id">Organization ID</param>
         /// <param name="command">Data to be updated</param>
         [HttpPut("{id}")]
-        // [PermissionAuthorize(PermissionAction.Update, "Organizations")]
+        // [PermissionAuthorize(PermissionAction.Update, "Organization")]
         public async Task<IActionResult> UpdateAsync(
             [FromRoute] int id,
             [FromBody] UpdateOrganizationCommand command)
@@ -60,7 +60,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         /// </summary>
         /// <param name="id">Organization ID</param>
         [HttpDelete("{id}")]
-        // [PermissionAuthorize(PermissionAction.Delete, "Organizations")]
+        // [PermissionAuthorize(PermissionAction.Delete, "Organization")]
         public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
             await Mediator.Send(new DeleteOrganizationCommand { OrganizationId = id });
@@ -83,7 +83,7 @@ namespace CleanArchCQRSandMediator.API.Controllers
         /// 
         /// </remarks>
         [HttpGet]
-        // [PermissionAuthorize(PermissionAction.View, "Organizations")]
+        // [PermissionAuthorize(PermissionAction.View, "Organization")]
         public async Task<ActionResult<PagedResult<OrganizationDto>>> GetAllAsync(
             [FromQuery] OrganizationFilterDto filter)
         {

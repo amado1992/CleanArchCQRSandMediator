@@ -26,7 +26,7 @@ namespace CleanArchCQRSandMediator.Application.Organizations.Commands.DeleteOrga
             // 2. Soft delete: mark as inactive (recommended for SaaS)
             // organization.IsActive = false;
 
-            // 3. Save changes
+            // 3. Save changes and delete tenants
             _context.Tenants.Remove(organization);
             await _context.SaveChangesAsync(cancellationToken);
 

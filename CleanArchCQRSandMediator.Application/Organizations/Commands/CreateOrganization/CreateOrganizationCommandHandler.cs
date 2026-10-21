@@ -3,25 +3,16 @@ using CleanArchCQRSandMediator.Application.Common.Interfaces;
 using CleanArchCQRSandMediator.Domain.Entities.Business;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchCQRSandMediator.Application.Organizations.Commands.CreateOrganization
 {
     public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand, int>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentUserService;
 
-        public CreateOrganizationCommandHandler(
-            IApplicationDbContext context,
-            ICurrentUserService currentUserService)
+        public CreateOrganizationCommandHandler(IApplicationDbContext context)
         {
             _context = context;
-            _currentUserService = currentUserService;
         }
 
         public async Task<int> Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)

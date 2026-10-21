@@ -117,7 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Brand_Not_Found" xml:space="preserve">
+    <value>Brand not found.</value>
+  </data>
+  <data name="Brand_With_Associated_Products" xml:space="preserve">
+    <value>The brand cannot be deleted because it has associated products. Deactivate it instead, or reassign the products.</value>
+  </data>
+  <data name="Brand_With_Name_Already_Exists" xml:space="preserve">
+    <value>A brand with the name {0} already exists.</value>
+  </data>
   <data name="InvalidCredentials" xml:space="preserve">
     <value>Invalid credentials</value>
+  </data>
+  <data name="Organization_Not_Found" xml:space="preserve">
+    <value>Organization not found.</value>
   </data>
 </root>

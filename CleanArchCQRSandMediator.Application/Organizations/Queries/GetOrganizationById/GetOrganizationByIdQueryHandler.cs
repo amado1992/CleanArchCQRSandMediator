@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using CleanArchCQRSandMediator.Application.Common.Exceptions;
+﻿using CleanArchCQRSandMediator.Application.Common.Exceptions;
 using CleanArchCQRSandMediator.Application.Common.Interfaces;
 using CleanArchCQRSandMediator.Application.Dtos.Organizations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 
 namespace CleanArchCQRSandMediator.Application.Organizations.Queries.GetOrganizationById
@@ -11,12 +11,12 @@ namespace CleanArchCQRSandMediator.Application.Organizations.Queries.GetOrganiza
     public class GetOrganizationByIdQueryHandler : IRequestHandler<GetOrganizationByIdQuery, OrganizationDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly IStringLocalizer<SharedResources> _localizer;
 
-        public GetOrganizationByIdQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetOrganizationByIdQueryHandler(IApplicationDbContext context, IStringLocalizer<SharedResources> localizer)
         {
             _context = context;
-            _mapper = mapper;
+            _localizer = localizer;
         }
 
         public async Task<OrganizationDto> Handle(
@@ -25,12 +25,21 @@ namespace CleanArchCQRSandMediator.Application.Organizations.Queries.GetOrganiza
         {
             var organization = await _context.Tenants
                 .AsNoTracking()
-                .FirstOrDefaultAsync(o => o.Id == request.OrganizationId, cancellationToken);
+                .Where(o => o.Id == request.OrganizationId)
+                .Select(o => new OrganizationDto
+                {
+                    Id = o.Id,
+                    Name = o.Name,
+                    Description = o.Description,
+                    Slug = o.Slug,
+                    IsActive = o.IsActive,
+                })
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (organization == null)
-                throw new NotFoundException("The organization was not found.");
+                throw new NotFoundException(_localizer["Organization_Not_Found"]);
 
-            return _mapper.Map<OrganizationDto>(organization);
+            return organization;
         }
     }
 }

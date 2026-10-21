@@ -61,11 +61,47 @@ namespace CleanArchCQRSandMediator.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Credenciales inválidas.
+        ///   Looks up a localized string similar to Marca no encontrada..
+        /// </summary>
+        internal static string Brand_Not_Found {
+            get {
+                return ResourceManager.GetString("Brand_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No se puede eliminar la marca porque tiene productos asociados. Desactívala en su lugar o reasigna los productos..
+        /// </summary>
+        internal static string Brand_With_Associated_Products {
+            get {
+                return ResourceManager.GetString("Brand_With_Associated_Products", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ya existe una marca con el nombre {0}..
+        /// </summary>
+        internal static string Brand_With_Name_Already_Exists {
+            get {
+                return ResourceManager.GetString("Brand_With_Name_Already_Exists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credenciales no válidas.
         /// </summary>
         internal static string InvalidCredentials {
             get {
                 return ResourceManager.GetString("InvalidCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organización no encontrada..
+        /// </summary>
+        internal static string Organization_Not_Found {
+            get {
+                return ResourceManager.GetString("Organization_Not_Found", resourceCulture);
             }
         }
     }

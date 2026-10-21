@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="IdMismatch" xml:space="preserve">
+    <value>Incoherencia de ID.</value>
+  </data>
   <data name="SessionSuccessfullyClosed" xml:space="preserve">
     <value>Sesión finalizada con éxito</value>
   </data>
