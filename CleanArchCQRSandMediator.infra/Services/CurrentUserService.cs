@@ -7,6 +7,7 @@ namespace CleanArchCQRSandMediator.infra.Services
     public class CurrentUserService : ICurrentUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private const string SuperAdminRole = "Super administrador";
 
         public CurrentUserService(IHttpContextAccessor httpContextAccessor)
         {
@@ -52,6 +53,12 @@ namespace CleanArchCQRSandMediator.infra.Services
                 return null;
 
             return authHeader.Substring("Bearer ".Length).Trim();
+        }
+
+        public bool IsSuperAdmin()
+        {
+            return _httpContextAccessor.HttpContext?.User
+                .IsInRole(SuperAdminRole) ?? false;
         }
     }
 }

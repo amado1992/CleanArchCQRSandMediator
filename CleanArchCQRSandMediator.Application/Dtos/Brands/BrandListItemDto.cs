@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CleanArchCQRSandMediator.Application.Dtos.Brands
+﻿namespace CleanArchCQRSandMediator.Application.Dtos.Brands
 {
-    internal class BrandListItemDto
+    public class BrandListItemDto
     {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string OrganizationName { get; set; } = string.Empty;
     }
 }

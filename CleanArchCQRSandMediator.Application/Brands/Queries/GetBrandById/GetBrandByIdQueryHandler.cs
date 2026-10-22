@@ -30,13 +30,12 @@ namespace CleanArchCQRSandMediator.Application.Brands.Queries.GetBrandById
                     Id = b.Id,
                     Name = b.Name,
                     Description = b.Description,
-                    Code = b.Code,
-                    TenantId = b.TenantId
+                    OrganizationName = b.Tenant.Name  // Tenant = Organization
                 })
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (brand == null)
-                throw new NotFoundException(_localizer["Organization_Not_Found"]);
+                throw new NotFoundException(_localizer["Brand_Not_Found"].Value);
 
             return brand;
         }

@@ -4,9 +4,8 @@ using MediatR;
 
 namespace CleanArchCQRSandMediator.Application.Brands.Queries.GetBrands
 {
-    internal class GetBrandsQuery : IRequest<PagedResult<BrandListItemDto>>
+    public class GetBrandsQuery : IRequest<PagedResult<BrandListItemDto>>
     {
         public BrandFilterDto Filter { get; set; } = new BrandFilterDto();
     }
-}
 }

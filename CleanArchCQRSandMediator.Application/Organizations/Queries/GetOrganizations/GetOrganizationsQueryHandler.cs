@@ -11,22 +11,32 @@ namespace CleanArchCQRSandMediator.Application.Organizations.Queries.GetOrganiza
     public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuery, PagedResult<OrganizationDto>>
     {
         private readonly IApplicationDbContext _context;
+        private readonly ICurrentUserService _currentUserService;
 
-        public GetOrganizationsQueryHandler(IApplicationDbContext context)
+        public GetOrganizationsQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
         {
             _context = context;
+            _currentUserService = currentUserService;
         }
 
-        public async Task<PagedResult<OrganizationDto>> Handle(
-            GetOrganizationsQuery request,
-            CancellationToken cancellationToken)
+        public async Task<PagedResult<OrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
         {
             var filter = request.Filter;
 
-            // 1. Base query (AsNoTracking for read-only)
+            // 1. Base query (AsNoTracking for read-only).
             var query = _context.Tenants.AsNoTracking().AsQueryable();
 
-            // 2. Filters
+            // 2. Restriction by user (except Super Administrator).
+            if (!_currentUserService.IsSuperAdmin())
+            {
+                var userId = _currentUserService.GetUserId();
+
+                // The user only sees the tenants to which they belong.
+                query = query.Where(t =>
+                    t.ApplicationUserTenants.Any(aut => aut.ApplicationUserId == userId));
+            }
+
+            // 3. Filters
             if (!string.IsNullOrWhiteSpace(filter.Search))
             {
                 var search = filter.Search.Trim().ToLowerInvariant();
@@ -45,13 +55,13 @@ namespace CleanArchCQRSandMediator.Application.Organizations.Queries.GetOrganiza
                 query = query.Where(o => o.Slug == slug);
             }
 
-            // 3. Total records (before pagination)
+            // 4. Total records (before pagination)
             var totalCount = await query.CountAsync(cancellationToken);
 
-            // 4. Ordering (whitelist to prevent field injection)
+            // 5. Ordering
             query = ApplySorting(query, filter.SortBy, filter.SortOrder);
 
-            // 5. Pagination + projection to DTO
+            // 6. Pagination + projection to DTO
             var items = await query
                 .Skip((filter.Page - 1) * filter.PageSize)
                 .Take(filter.PageSize)
@@ -65,7 +75,7 @@ namespace CleanArchCQRSandMediator.Application.Organizations.Queries.GetOrganiza
                 })
                 .ToListAsync(cancellationToken);
 
-            // 6. Paginated result
+            // 7. Paginated result
             return new PagedResult<OrganizationDto>
             {
                 Items = items,
@@ -96,9 +106,9 @@ namespace CleanArchCQRSandMediator.Application.Organizations.Queries.GetOrganiza
                     ? query.OrderByDescending(o => o.Slug)
                     : query.OrderBy(o => o.Slug),
 
-                /*"createdat" => isDescending
+                /* "createdat" => isDescending
                     ? query.OrderByDescending(o => o.CreatedAt)
-                    : query.OrderBy(o => o.CreatedAt),*/
+                    : query.OrderBy(o => o.CreatedAt), */
 
                 "isactive" => isDescending
                     ? query.OrderByDescending(o => o.IsActive)

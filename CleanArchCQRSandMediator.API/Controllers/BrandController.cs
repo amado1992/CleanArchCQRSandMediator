@@ -4,7 +4,6 @@ using CleanArchCQRSandMediator.Application.Brands.Commands.DeleteBrand;
 using CleanArchCQRSandMediator.Application.Brands.Commands.UpdateBrand;
 using CleanArchCQRSandMediator.Application.Brands.Queries.GetBrandById;
 using CleanArchCQRSandMediator.Application.Dtos.Brands;
-using CleanArchCQRSandMediator.Application.Organizations.Commands.DeleteOrganization;
 using CleanArchCQRSandMediator.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
