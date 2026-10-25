@@ -75,7 +75,7 @@ namespace CleanArchCQRSandMediator.Application.Auth.Commands.Login
             await _context.SaveChangesAsync();
 
             // Update last login
-            user.LastLoginAt = DateTime.UtcNow;
+            user.LastLoginAt = DateTimeOffset.UtcNow;
             await _userManager.UpdateAsync(user);
 
             return new LoginResponse

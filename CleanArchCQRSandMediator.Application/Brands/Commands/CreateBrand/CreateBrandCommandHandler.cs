@@ -32,17 +32,7 @@ namespace CleanArchCQRSandMediator.Application.Brands.Commands.CreateBrand
 
             // 2. Normalize the code (uppercase, no spaces)
             var normalizedName = request.Name.Trim();
-            var normalizedCode = request.Code.Trim().ToUpperInvariant();
 
-            /* // 3. Verify that the code is unique within the tenant
-            var codeExists = await _context.Brands
-                .AnyAsync(b => b.Code == normalizedCode && b.TenantId == request.TenantId,
-                           cancellationToken);
-
-            if (codeExists)
-                throw new ConflictException(_localizer["Brand_With_Code_Already_Exists", normalizedCode]);*/
-
-            // 4. Verify that the name is unique within the tenant (case-insensitive)
             var nameExists = await _context.Brands
                 .AnyAsync(b => b.TenantId == request.TenantId
                             && b.Name.ToLower() == normalizedName.ToLower(),
@@ -51,16 +41,15 @@ namespace CleanArchCQRSandMediator.Application.Brands.Commands.CreateBrand
             if (nameExists)
                 throw new ConflictException(_localizer["Brand_With_Name_Already_Exists", normalizedName]);
 
-            // 5. Create the entity
+            // 3. Create the entity
             var brand = new Brand
             {
                 Name = normalizedName,
                 Description = request.Description?.Trim() ?? string.Empty,
-                Code = normalizedCode,
                 TenantId = request.TenantId
             };
 
-            // 6. Save
+            // 4. Save
             _context.Brands.Add(brand);
             await _context.SaveChangesAsync(cancellationToken);
 

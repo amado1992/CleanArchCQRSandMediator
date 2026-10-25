@@ -18,6 +18,19 @@ namespace CleanArchCQRSandMediator.infra.Persistence.Configurations
                        r => r.HasOne<Permission>(e => e.Permission).WithMany(e => e.ApplicationRolePermissions).HasForeignKey(e => e.PermissionId).HasPrincipalKey(e => e.Id).OnDelete(DeleteBehavior.Restrict),
                        l => l.HasOne<ApplicationRole>(e => e.ApplicationRole).WithMany(e => e.ApplicationRolePermissions).HasForeignKey(e => e.ApplicationRoleId).HasPrincipalKey(e => e.Id).OnDelete(DeleteBehavior.Restrict),
                        j => j.HasKey(e => e.Id));
+
+            // Optional one-to-many
+            builder.HasOne(t => t.CreatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.CreatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(t => t.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.UpdatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

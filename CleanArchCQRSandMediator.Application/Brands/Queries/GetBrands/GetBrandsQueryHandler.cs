@@ -10,10 +10,14 @@ namespace CleanArchCQRSandMediator.Application.Brands.Queries.GetBrands
     public class GetBrandsQueryHandler : IRequestHandler<GetBrandsQuery, PagedResult<BrandListItemDto>>
     {
         private readonly IApplicationDbContext _context;
+        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserAuthorizationService _userAuth;
 
-        public GetBrandsQueryHandler(IApplicationDbContext context)
+        public GetBrandsQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IUserAuthorizationService userAuth)
         {
             _context = context;
+            _currentUserService = currentUserService;
+            _userAuth = userAuth;
         }
 
         public async Task<PagedResult<BrandListItemDto>> Handle(
@@ -26,6 +30,16 @@ namespace CleanArchCQRSandMediator.Application.Brands.Queries.GetBrands
             //    El filtro global de TenantId se aplica automáticamente si está configurado
             var query = _context.Brands.AsNoTracking().AsQueryable();
 
+            // 2. 🔐 Si NO es Super Admin → filtrar por su TenantId
+            var isSuperAdmin = await _userAuth.IsSuperAdminAsync(cancellationToken);
+
+            if (!isSuperAdmin)
+            {
+                var tenantId = await _userAuth.GetDefaultTenantIdAsync();
+                query = query.Where(b => b.TenantId == tenantId);
+            }
+
+
             // 2. Filters
 
             // Búsqueda textual (Name, Description, Code)
@@ -34,8 +48,7 @@ namespace CleanArchCQRSandMediator.Application.Brands.Queries.GetBrands
                 var search = filter.Search.Trim().ToLowerInvariant();
                 query = query.Where(b =>
                     b.Name.ToLower().Contains(search) ||
-                    b.Description.ToLower().Contains(search) ||
-                    b.Code.ToLower().Contains(search));
+                    b.Description.ToLower().Contains(search));
             }
 
             // Filtro por TenantId (Organization)

@@ -13,5 +13,17 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business
         public Action Action { get; set; } = null!;
         public List<ApplicationRole> ApplicationRoles { get; } = [];
         public List<ApplicationRolePermission> ApplicationRolePermissions { get; } = [];
+
+        /// <summary>
+        /// User who created the permission. Nullable for seeders/migrations/jobs.
+        /// </summary>
+        public int? CreatedById { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
+
+        /// <summary>
+        /// User who last updated the permission.
+        /// </summary>
+        public int? UpdatedById { get; set; }
+        public ApplicationUser? UpdatedBy { get; set; }
     }
 }

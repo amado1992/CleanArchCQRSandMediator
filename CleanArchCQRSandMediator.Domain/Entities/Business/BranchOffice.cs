@@ -1,4 +1,5 @@
 ﻿using CleanArchCQRSandMediator.Domain.Common;
+using CleanArchCQRSandMediator.Domain.Entities.Identity;
 
 namespace CleanArchCQRSandMediator.Domain.Entities.Business
 {
@@ -7,7 +8,6 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string Code { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string CellPhone { get; set; } = string.Empty;
         public string WhatsApp { get; set; } = string.Empty;
@@ -15,5 +15,17 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business
         public int TenantId { get; set; }
         public Tenant Tenant { get; set; } = null!;
         public List<Purchase> Purchases { get; } = [];
+
+        /// <summary>
+        /// User who created the branch office. Nullable for seeders/migrations/jobs.
+        /// </summary>
+        public int? CreatedById { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
+
+        /// <summary>
+        /// User who last updated the branch office.
+        /// </summary>
+        public int? UpdatedById { get; set; }
+        public ApplicationUser? UpdatedBy { get; set; }
     }
 }

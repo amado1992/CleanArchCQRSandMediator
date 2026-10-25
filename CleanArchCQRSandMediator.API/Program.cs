@@ -102,6 +102,7 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();
 
 // Authorization handler registration (Scoped because it uses DbContext)
 builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();

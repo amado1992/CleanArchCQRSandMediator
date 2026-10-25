@@ -24,8 +24,7 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Identity
         public string SecondSurname { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
-        public DateTime CreatedAt { get; set; }
-        public DateTime? LastLoginAt { get; set; }
+        public DateTimeOffset? LastLoginAt { get; set; }
         public string CellPhone { get; set; } = string.Empty;
         public string? WhatsApp { get; set; } = null;
         public string? Address { get; set; } = null;
@@ -33,5 +32,23 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Identity
         public List<Tenant> Tenants { get; } = [];
         public List<ApplicationUserTenant> ApplicationUserTenants { get; } = [];
         public ICollection<RefreshToken> RefreshTokens { get; } = new List<RefreshToken>();
+
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset? UpdatedAt { get; set; }
+
+        /// <summary>
+        /// User who created the application user. Nullable for seeders/migrations/jobs.
+        /// </summary>
+        public int? CreatedById { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
+
+        /// <summary>
+        /// User who last updated the application user.
+        /// </summary>
+        public int? UpdatedById { get; set; }
+        public ApplicationUser? UpdatedBy { get; set; }
+
+        public List<Tenant> CreatedTenants { get; set; } = [];
+        public List<Tenant> UpdatedTenants { get; set; } = [];
     }
 }

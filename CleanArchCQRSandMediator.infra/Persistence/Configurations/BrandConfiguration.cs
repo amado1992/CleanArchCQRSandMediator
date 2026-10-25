@@ -12,6 +12,7 @@ namespace CleanArchCQRSandMediator.infra.Persistence.Configurations
             builder.HasMany(x => x.Products)
                    .WithOne(x => x.Brand)
                    .HasForeignKey(x => x.BrandId)
+                   .IsRequired(false)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(e => e.Tenant)
@@ -19,6 +20,19 @@ namespace CleanArchCQRSandMediator.infra.Persistence.Configurations
                    .HasForeignKey(e => e.TenantId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Cascade);
+
+            // Optional one-to-many
+            builder.HasOne(t => t.CreatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.CreatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(t => t.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.UpdatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

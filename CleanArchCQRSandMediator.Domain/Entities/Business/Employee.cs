@@ -17,15 +17,17 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business
         public string Address { get; set; } = string.Empty;
         public int TenantId { get; set; }
         public Tenant Tenant { get; set; } = null!;
+
         /// <summary>
-        /// User creator 
+        /// User who created the employee. Nullable for seeders/migrations/jobs.
         /// </summary>
-        public int ApplicationUserCreatorId { get; set; }
-        public virtual ApplicationUser ApplicationUserCreator { get; set; } = null!;
+        public int? CreatedById { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
+
         /// <summary>
-        /// User updater
+        /// User who last updated the employee.
         /// </summary>
-        public int? ApplicationUserUpdaterId { get; set; }
-        public virtual ApplicationUser? ApplicationUserUpdater { get; set; } = null!;
+        public int? UpdatedById { get; set; }
+        public ApplicationUser? UpdatedBy { get; set; }
     }
 }

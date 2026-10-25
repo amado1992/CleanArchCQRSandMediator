@@ -32,7 +32,7 @@ namespace CleanArchCQRSandMediator.Application.Brands.Commands.UpdateBrand
             if (brand == null)
                 throw new NotFoundException(_localizer["Brand_Not_Found"]);
 
-            // 4. Verify that the new name is not already in use by another brand within the same tenant (case-insensitive)
+            // 3. Verify that the new name is not already in use by another brand within the same tenant (case-insensitive)
             var nameExists = await _context.Brands
                 .AnyAsync(b => b.TenantId == brand.TenantId
                             && b.Name.ToLower() == normalizedName.ToLower()
@@ -46,7 +46,6 @@ namespace CleanArchCQRSandMediator.Application.Brands.Commands.UpdateBrand
             // 4. Update allowed properties
             brand.Name = normalizedName;
             brand.Description = request.Description?.Trim() ?? string.Empty;
-            brand.Code = normalizedCode;
             // TenantId is not updated (the brand remains in its original tenant)
 
             // 5. Save (UpdatedAt is handled automatically in SaveChangesAsync)

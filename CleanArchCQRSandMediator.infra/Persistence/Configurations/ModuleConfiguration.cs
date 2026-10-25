@@ -16,6 +16,19 @@ namespace CleanArchCQRSandMediator.infra.Persistence.Configurations
                    .HasForeignKey(x => x.ModuleId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Restrict);
+
+            // Optional one-to-many
+            builder.HasOne(t => t.CreatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.CreatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(t => t.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.UpdatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

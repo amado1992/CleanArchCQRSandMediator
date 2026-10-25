@@ -1,8 +1,9 @@
-﻿using CleanArchCQRSandMediator.Domain.Entities.Identity;
+﻿using CleanArchCQRSandMediator.Domain.Common;
+using CleanArchCQRSandMediator.Domain.Entities.Identity;
 
 namespace CleanArchCQRSandMediator.Domain.Entities.Business
 {
-    public class ApplicationRolePermission
+    public class ApplicationRolePermission : BaseEntity
     {
         public int Id { get; set; }
         public int ApplicationRoleId { get; set; }
@@ -10,5 +11,17 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business
 
         public int PermissionId { get; set; }
         public Permission Permission { get; set; } = null!;
+
+        /// <summary>
+        /// User who created the application role permission. Nullable for seeders/migrations/jobs.
+        /// </summary>
+        public int? CreatedById { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
+
+        /// <summary>
+        /// User who last updated the application role permission.
+        /// </summary>
+        public int? UpdatedById { get; set; }
+        public ApplicationUser? UpdatedBy { get; set; }
     }
 }

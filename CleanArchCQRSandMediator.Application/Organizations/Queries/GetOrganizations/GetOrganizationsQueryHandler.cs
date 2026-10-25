@@ -12,11 +12,13 @@ namespace CleanArchCQRSandMediator.Application.Organizations.Queries.GetOrganiza
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IUserAuthorizationService _userAuth;
 
-        public GetOrganizationsQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
+        public GetOrganizationsQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IUserAuthorizationService userAuth)
         {
             _context = context;
             _currentUserService = currentUserService;
+            _userAuth = userAuth;
         }
 
         public async Task<PagedResult<OrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
@@ -27,7 +29,8 @@ namespace CleanArchCQRSandMediator.Application.Organizations.Queries.GetOrganiza
             var query = _context.Tenants.AsNoTracking().AsQueryable();
 
             // 2. Restriction by user (except Super Administrator).
-            if (!_currentUserService.IsSuperAdmin())
+            var isSuperAdmin = await _userAuth.IsSuperAdminAsync();
+            if (!isSuperAdmin)
             {
                 var userId = _currentUserService.GetUserId();
 

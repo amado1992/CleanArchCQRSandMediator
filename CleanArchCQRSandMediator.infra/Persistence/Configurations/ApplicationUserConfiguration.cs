@@ -21,6 +21,18 @@ namespace CleanArchCQRSandMediator.infra.Persistence.Configurations
 
             builder.Property(e => e.Sex)
                    .HasConversion<string>();
+
+            // CreatedBy (self-reference)
+            builder.HasOne(u => u.CreatedBy)
+                   .WithMany()                                  // there is no inverse collection
+                   .HasForeignKey(u => u.CreatedById)
+                   .OnDelete(DeleteBehavior.Restrict);          // or SetNull
+
+            // UpdatedBy (self-reference)
+            builder.HasOne(u => u.UpdatedBy)
+                   .WithMany()
+                   .HasForeignKey(u => u.UpdatedById)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

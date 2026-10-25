@@ -17,6 +17,19 @@ namespace CleanArchCQRSandMediator.infra.Persistence.Configurations
 
             builder.HasKey(rt => rt.Id); // (Optional), it already does so by convention
             builder.HasIndex(e => e.Token).IsUnique();
+
+            // Optional one-to-many
+            builder.HasOne(t => t.CreatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.CreatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(t => t.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.UpdatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -102,7 +102,6 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
                     EmailConfirmed = true,
                     LockoutEnabled = false,
                     IsActive = true,
-                    CreatedAt = DateTime.UtcNow,
                     SecurityStamp = Guid.NewGuid().ToString()
                 };
 
@@ -160,11 +159,10 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
         /// <returns></returns>
         private static async Task CreateCurrenciesAsync(ApplicationDbContext context)
         {
-            var CreatedAt = DateTime.UtcNow;
             var currencies = new List<Currency>
             {
-                new Currency { Code = "EUR", Number = 978, Symbol = "€", CreatedAt = CreatedAt },
-                new Currency { Code = "USD", Number = 840, Symbol = "$", CreatedAt = CreatedAt },
+                new Currency { Code = "EUR", Number = 978, Symbol = "€" },
+                new Currency { Code = "USD", Number = 840, Symbol = "$" }
             };
 
             foreach (var currency in currencies)
@@ -250,7 +248,6 @@ namespace CleanArchCQRSandMediator.infra.Persistence.InitialData
                 user.LockoutEnabled = false;
                 user.SecurityStamp = Guid.NewGuid().ToString();
                 user.IsActive = true;
-                user.CreatedAt = DateTime.UtcNow;
 
                 context.Users.Add(user);
                 context.SaveChanges();

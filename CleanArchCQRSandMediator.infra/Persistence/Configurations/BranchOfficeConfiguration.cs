@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CleanArchCQRSandMediator.infra.Persistence.Configurations
 {
-    internal class BranchOfficeConfiguration : IEntityTypeConfiguration<BranchOffice>
+    public class BranchOfficeConfiguration : IEntityTypeConfiguration<BranchOffice>
     {
         public void Configure(EntityTypeBuilder<BranchOffice> builder)
         {
@@ -14,6 +14,19 @@ namespace CleanArchCQRSandMediator.infra.Persistence.Configurations
                    .HasForeignKey(e => e.TenantId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Cascade);
+
+            // Optional one-to-many
+            builder.HasOne(t => t.CreatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.CreatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(t => t.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.UpdatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
