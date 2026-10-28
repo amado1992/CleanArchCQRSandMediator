@@ -8,6 +8,9 @@
         // Filter by active/inactive status
         public bool? IsActive { get; set; }
 
+        // Filter by user id
+        public int? UserId { get; set; }
+
         // Filter by exact slug (useful for lookups)
         public string? Slug { get; set; }
 

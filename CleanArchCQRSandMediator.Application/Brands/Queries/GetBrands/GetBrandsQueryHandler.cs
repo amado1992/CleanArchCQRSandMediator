@@ -1,9 +1,11 @@
-﻿using CleanArchCQRSandMediator.Application.Common.Interfaces;
+﻿using CleanArchCQRSandMediator.Application.Common.Exceptions;
+using CleanArchCQRSandMediator.Application.Common.Interfaces;
 using CleanArchCQRSandMediator.Application.Common.Models;
 using CleanArchCQRSandMediator.Application.Dtos.Brands;
 using CleanArchCQRSandMediator.Domain.Entities.Business.Product;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace CleanArchCQRSandMediator.Application.Brands.Queries.GetBrands
 {
@@ -12,12 +14,14 @@ namespace CleanArchCQRSandMediator.Application.Brands.Queries.GetBrands
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentUserService;
         private readonly IUserAuthorizationService _userAuth;
+        private readonly IStringLocalizer<SharedResources> _localizer;
 
-        public GetBrandsQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IUserAuthorizationService userAuth)
+        public GetBrandsQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IUserAuthorizationService userAuth, IStringLocalizer<SharedResources> localizer)
         {
             _context = context;
             _currentUserService = currentUserService;
             _userAuth = userAuth;
+            _localizer = localizer;
         }
 
         public async Task<PagedResult<BrandListItemDto>> Handle(
@@ -27,22 +31,30 @@ namespace CleanArchCQRSandMediator.Application.Brands.Queries.GetBrands
             var filter = request.Filter;
 
             // 1. Base query (AsNoTracking for read-only)
-            //    El filtro global de TenantId se aplica automáticamente si está configurado
             var query = _context.Brands.AsNoTracking().AsQueryable();
 
-            // 2. 🔐 Si NO es Super Admin → filtrar por su TenantId
             var isSuperAdmin = await _userAuth.IsSuperAdminAsync(cancellationToken);
 
-            if (!isSuperAdmin)
+            // 2. Filter by TenantId (Organization)
+            if (filter.TenantId.HasValue)
             {
-                var tenantId = await _userAuth.GetDefaultTenantIdAsync();
+                await _userAuth.EnsureCanAccessTenantAsync(filter.TenantId.Value, cancellationToken);
+                query = query.Where(b => b.TenantId == filter.TenantId.Value);
+            }
+            else if (!isSuperAdmin)
+            {
+                var tenantId = await _userAuth.GetDefaultTenantIdAsync(cancellationToken);
+
+                if (!tenantId.HasValue)
+                    throw new UnauthorizedException(_localizer["UserNotHaveAssignedOrganization"]);
+
                 query = query.Where(b => b.TenantId == tenantId);
             }
 
 
             // 2. Filters
 
-            // Búsqueda textual (Name, Description, Code)
+            // Text search (Name, Description)
             if (!string.IsNullOrWhiteSpace(filter.Search))
             {
                 var search = filter.Search.Trim().ToLowerInvariant();
@@ -50,10 +62,6 @@ namespace CleanArchCQRSandMediator.Application.Brands.Queries.GetBrands
                     b.Name.ToLower().Contains(search) ||
                     b.Description.ToLower().Contains(search));
             }
-
-            // Filtro por TenantId (Organization)
-            if (filter.TenantId.HasValue)
-                query = query.Where(b => b.TenantId == filter.TenantId.Value);
 
             // 3. Total records (before pagination)
             var totalCount = await query.CountAsync(cancellationToken);
@@ -63,7 +71,7 @@ namespace CleanArchCQRSandMediator.Application.Brands.Queries.GetBrands
 
             // 5. Pagination + projection to DTO
             //    OrganizationName = b.Tenant.Name (Tenant = Organization)
-            //    EF Core lo traduce a un INNER JOIN automáticamente
+            //    EF Core automatically translates it into an INNER JOIN.
             var items = await query
                 .Skip((filter.Page - 1) * filter.PageSize)
                 .Take(filter.PageSize)
@@ -72,7 +80,7 @@ namespace CleanArchCQRSandMediator.Application.Brands.Queries.GetBrands
                     Id = b.Id,
                     Name = b.Name,
                     Description = b.Description,
-                    OrganizationName = b.Tenant.Name  // ← JOIN con tenants
+                    OrganizationName = b.Tenant.Name  // JOIN with tenants
                 })
                 .ToListAsync(cancellationToken);
 

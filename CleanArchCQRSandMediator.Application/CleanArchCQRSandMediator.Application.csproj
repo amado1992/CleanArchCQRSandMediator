@@ -23,53 +23,20 @@
   </ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Resources\Brands\Commands\CreateBrand\CreateBrandCommandHandler.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>CreateBrandCommandHandler.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\Brands\Commands\CreateBrand\CreateBrandCommandValidator.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>CreateBrandCommandValidator.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\Brands\Commands\UpdateBrand\UpdateBrandCommandValidator.Designer.cs">
-	    <DependentUpon>UpdateBrandCommandValidator.resx</DependentUpon>
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	  </Compile>
-	  <Compile Update="Resources\Organizations\Commands\CreateOrganization\CreateOrganizationCommandValidator.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>CreateOrganizationCommandValidator.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\SharedResources.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>SharedResources.resx</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <EmbeddedResource Update="Resources\Brands\Commands\CreateBrand\CreateBrandCommandHandler.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>CreateBrandCommandHandler.Designer.cs</LastGenOutput>
+	    <Generator></Generator>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\Brands\Commands\CreateBrand\CreateBrandCommandValidator.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>CreateBrandCommandValidator.Designer.cs</LastGenOutput>
+	    <Generator></Generator>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\Brands\Commands\UpdateBrand\UpdateBrandCommandValidator.resx">
-	    <LastGenOutput>UpdateBrandCommandValidator.Designer.cs</LastGenOutput>
-	    <Generator>ResXFileCodeGenerator</Generator>
+	    <Generator></Generator>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\Organizations\Commands\CreateOrganization\CreateOrganizationCommandValidator.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>CreateOrganizationCommandValidator.Designer.cs</LastGenOutput>
+	    <Generator></Generator>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\SharedResources.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
+	    <Generator></Generator>
 	  </EmbeddedResource>
 	</ItemGroup>
 

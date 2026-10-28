@@ -127,9 +127,15 @@
     <value>A brand with the name {0} already exists.</value>
   </data>
   <data name="InvalidCredentials" xml:space="preserve">
-    <value>Invalid credentials</value>
+    <value>Invalid credentials.</value>
+  </data>
+  <data name="UserNotHaveAccessOrganization" xml:space="preserve">
+    <value>You do not have access to this organization.</value>
   </data>
   <data name="Organization_Not_Found" xml:space="preserve">
     <value>Organization not found.</value>
+  </data>
+  <data name="UserNotHaveAssignedOrganization" xml:space="preserve">
+    <value>The user does not have an organization.</value>
   </data>
 </root>

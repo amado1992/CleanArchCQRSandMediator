@@ -129,7 +129,13 @@
   <data name="InvalidCredentials" xml:space="preserve">
     <value>Credenciales inválidas</value>
   </data>
+  <data name="UserNotHaveAccessOrganization" xml:space="preserve">
+    <value>No tiene acceso a esta organizazión.</value>
+  </data>
   <data name="Organization_Not_Found" xml:space="preserve">
     <value>Organización no encontrada.</value>
+  </data>
+  <data name="UserNotHaveAssignedOrganization" xml:space="preserve">
+    <value>El usuario no tiene un organización.</value>
   </data>
 </root>

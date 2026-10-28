@@ -1,4 +1,5 @@
-﻿using CleanArchCQRSandMediator.Application.Common.Interfaces;
+﻿using CleanArchCQRSandMediator.Application.Common.Exceptions;
+using CleanArchCQRSandMediator.Application.Common.Interfaces;
 using CleanArchCQRSandMediator.Application.Common.Models;
 using CleanArchCQRSandMediator.Application.Dtos.Organizations;
 using CleanArchCQRSandMediator.Domain.Entities.Business;
@@ -28,15 +29,35 @@ namespace CleanArchCQRSandMediator.Application.Organizations.Queries.GetOrganiza
             // 1. Base query (AsNoTracking for read-only).
             var query = _context.Tenants.AsNoTracking().AsQueryable();
 
-            // 2. Restriction by user (except Super Administrator).
-            var isSuperAdmin = await _userAuth.IsSuperAdminAsync();
-            if (!isSuperAdmin)
+            // 2. Filter by UserId
+            var isSuperAdmin = await _userAuth.IsSuperAdminAsync(cancellationToken);
+
+            if (filter.UserId.HasValue)
             {
-                var userId = _currentUserService.GetUserId();
+                // Usuario normal: solo puede filtrar por su propio userId
+                if (!isSuperAdmin)
+                {
+                    var currentUserId = _currentUserService.GetUserId();
+
+                    if (filter.UserId.Value != currentUserId)
+                        throw new ForbiddenException("No tiene acceso a los tenants de otro usuario.");
+                }
 
                 // The user only sees the tenants to which they belong.
                 query = query.Where(t =>
-                    t.ApplicationUserTenants.Any(aut => aut.ApplicationUserId == userId));
+                    t.ApplicationUserTenants.Any(aut => aut.ApplicationUserId == filter.UserId.Value));
+            }
+            else
+            {
+                // Restriction by user (except Super Administrator).
+                if (!isSuperAdmin)
+                {
+                    var userId = _currentUserService.GetUserId();
+
+                    // The user only sees the tenants to which they belong.
+                    query = query.Where(t =>
+                        t.ApplicationUserTenants.Any(aut => aut.ApplicationUserId == userId));
+                }
             }
 
             // 3. Filters
