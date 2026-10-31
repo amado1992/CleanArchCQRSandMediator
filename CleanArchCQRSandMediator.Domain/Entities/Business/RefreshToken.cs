@@ -8,7 +8,7 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business
         public int Id { get; set; }
         public string Token { get; set; } = string.Empty;
         public string JwtId { get; set; } = string.Empty; // Access token ID (for revocation)
-        public DateTime ExpiresAt { get; set; }
+        public DateTimeOffset ExpiresAt { get; set; }
         public bool IsRevoked { get; set; }
         public int ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; } = null!;

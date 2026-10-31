@@ -32,7 +32,7 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Identity
         public Sex Sex { get; set; }
         public List<Tenant> Tenants { get; } = [];
         public List<ApplicationUserTenant> ApplicationUserTenants { get; } = [];
-        public ICollection<RefreshToken> RefreshTokens { get; } = new List<RefreshToken>();
+        public List<RefreshToken> RefreshTokens { get; } = [];
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
         public DateTimeOffset? UpdatedAt { get; set; }
@@ -51,8 +51,5 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Identity
 
         public List<Tenant> CreatedTenants { get; set; } = [];
         public List<Tenant> UpdatedTenants { get; set; } = [];
-
-        public List<Plan> Plans { get; } = [];
-        public List<Subscription> Subscriptions { get; } = [];
     }
 }
