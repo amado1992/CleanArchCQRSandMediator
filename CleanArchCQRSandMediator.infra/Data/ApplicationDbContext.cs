@@ -1,5 +1,6 @@
 ﻿using CleanArchCQRSandMediator.Application.Common.Interfaces;
 using CleanArchCQRSandMediator.Domain.Entities.Business;
+using CleanArchCQRSandMediator.Domain.Entities.Business.Plan;
 using CleanArchCQRSandMediator.Domain.Entities.Business.Product;
 using CleanArchCQRSandMediator.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +32,14 @@ namespace CleanArchCQRSandMediator.infra.Data
         public DbSet<Provider> Providers { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<Currency> Currencies { get; set; }
+
+        // Plans
+        public DbSet<Plan> Plans { get; set; }
+        public DbSet<Feature> Features { get; set; }
+        public DbSet<PlanFeature> PlanFeatures { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<UsageRecord> UsageRecords { get; set; }
 
         // Products
         public DbSet<Brand> Brands { get; set; }

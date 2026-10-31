@@ -33,18 +33,21 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business.Plan
         /// <summary>ID de la suscripción en la pasarela de pago externa (Stripe, PayPal, etc.).</summary>
         public string? ExternalSubscriptionId { get; set; }
 
-        /// <summary>Navegación al User.</summary>
-        public ApplicationUser User { get; set; } = null!;
-
-        /// <summary>Navegación al Plan.</summary>
-        public Plan Plan { get; set; } = null!;
-
-        public List<Payment> Payments { get; } = [];
+        /// <summary>
+        /// User who created the subscription. Nullable for seeders/migrations/jobs.
+        /// </summary>
+        public int? CreatedById { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
 
         /// <summary>
-        /// Navegación de una Many-to-many relationships (UsageRecords)
+        /// User who last updated the subscription.
         /// </summary>
-        public List<Feature> Features { get; } = [];
+        public int? UpdatedById { get; set; }
+        public ApplicationUser? UpdatedBy { get; set; }
+
+        // Navigation Properties
+        public Plan Plan { get; set; } = null!;
+        public List<Payment> Payments { get; } = [];
         public List<UsageRecord> UsageRecords { get; } = [];
     }
 }

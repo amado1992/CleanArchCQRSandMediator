@@ -36,16 +36,10 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business.Plan
         public int? UpdatedById { get; set; }
         public ApplicationUser? UpdatedBy { get; set; }
 
-        /// <summary>
-        /// Navigation Properties de una Many-to-many relationships (PlanFeature)
-        /// </summary>
+
+        // Navigation Properties
         public List<Plan> Plans { get; } = [];
         public List<PlanFeature> PlanFeatures { get; } = [];
-
-        /// <summary>
-        /// Navigation Properties de una Many-to-many relationships (UsageRecord)
-        /// </summary>
-        public List<Subscription> Subscriptions { get; } = [];
         public List<UsageRecord> UsageRecords { get; } = [];
     }
 }

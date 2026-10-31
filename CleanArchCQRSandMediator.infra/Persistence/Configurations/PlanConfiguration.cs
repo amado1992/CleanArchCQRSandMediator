@@ -24,11 +24,22 @@ namespace CleanArchCQRSandMediator.infra.Persistence.Configurations
                        l => l.HasOne<Plan>(e => e.Plan).WithMany(e => e.PlanFeatures).HasForeignKey(e => e.PlanId).HasPrincipalKey(e => e.Id).OnDelete(DeleteBehavior.Restrict),
                        j => 
                        {
-                           // j.HasKey(e => e.Id);
-                           // j.HasIndex(pf => pf.Id).IsUnique();
                            j.HasKey(pf => new { pf.PlanId, pf.FeatureId });
                            j.ToTable("PlanFeatures"); 
                        });
+
+            // Optional one-to-many
+            builder.HasOne(t => t.CreatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.CreatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(t => t.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(t => t.UpdatedById)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

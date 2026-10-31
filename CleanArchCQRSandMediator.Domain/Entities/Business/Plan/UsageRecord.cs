@@ -1,4 +1,5 @@
 ﻿using CleanArchCQRSandMediator.Domain.Common;
+using CleanArchCQRSandMediator.Domain.Entities.Identity;
 
 namespace CleanArchCQRSandMediator.Domain.Entities.Business.Plan
 {
@@ -22,10 +23,20 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business.Plan
         /// <summary>Fecha y hora exacta del consumo.</summary>
         public DateTimeOffset RecordedAt { get; set; } = DateTimeOffset.UtcNow;
 
-        /// <summary>Navegación a la Suscripción.</summary>
+        // Navigation Properties
         public Subscription Subscription { get; set; } = null!;
-
-        /// <summary>Navegación a la Feature.</summary>
         public Feature Feature { get; set; } = null!;
+
+        /// <summary>
+        /// User who created the feature. Nullable for seeders/migrations/jobs.
+        /// </summary>
+        public int? CreatedById { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
+
+        /// <summary>
+        /// User who last updated the feature.
+        /// </summary>
+        public int? UpdatedById { get; set; }
+        public ApplicationUser? UpdatedBy { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CleanArchCQRSandMediator.Domain.Common;
+using CleanArchCQRSandMediator.Domain.Entities.Identity;
 using CleanArchCQRSandMediator.Domain.Enums;
 
 namespace CleanArchCQRSandMediator.Domain.Entities.Business.Plan
@@ -31,5 +32,17 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business.Plan
 
         /// <summary>Navegación a la Suscripción.</summary>
         public Subscription Subscription { get; set; } = null!;
+
+        /// <summary>
+        /// User who created the payment. Nullable for seeders/migrations/jobs.
+        /// </summary>
+        public int? CreatedById { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
+
+        /// <summary>
+        /// User who last updated the payment.
+        /// </summary>
+        public int? UpdatedById { get; set; }
+        public ApplicationUser? UpdatedBy { get; set; }
     }
 }

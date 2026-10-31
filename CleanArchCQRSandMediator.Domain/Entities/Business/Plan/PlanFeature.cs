@@ -1,14 +1,13 @@
-﻿using CleanArchCQRSandMediator.Domain.Entities.Identity;
+﻿using CleanArchCQRSandMediator.Domain.Common;
+using CleanArchCQRSandMediator.Domain.Entities.Identity;
 
 namespace CleanArchCQRSandMediator.Domain.Entities.Business.Plan
 {
     /// <summary>
     /// Tabla puente que relaciona un Plan con sus Features, añadiendo los límites específicos.
     /// </summary>
-    public class PlanFeature
+    public class PlanFeature : BaseEntity
     {
-        // public int Id { get; set; }
-
         /// <summary>FK al Plan.</summary>
         public int PlanId { get; set; }
 
