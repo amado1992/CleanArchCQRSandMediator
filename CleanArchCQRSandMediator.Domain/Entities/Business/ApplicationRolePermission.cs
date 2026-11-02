@@ -5,7 +5,6 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Business
 {
     public class ApplicationRolePermission : BaseEntity
     {
-        public int Id { get; set; }
         public int ApplicationRoleId { get; set; }
         public ApplicationRole ApplicationRole { get; set; } = null!;
 

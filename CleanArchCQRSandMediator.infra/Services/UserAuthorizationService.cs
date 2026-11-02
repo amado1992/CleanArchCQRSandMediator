@@ -132,8 +132,8 @@ namespace CleanArchCQRSandMediator.infra.Services
         }
 
         /// <summary>
-        /// Verifica que el usuario actual pertenece al tenant indicado.
-        /// Lanza <see cref="ForbiddenException"/> si no pertenece.
+        /// Verify that the current user belongs to the specified tenant.
+        /// Throws <see cref="ForbiddenException"/> if it doesn't belong.
         /// </summary>
         public async Task EnsureCurrentUserBelongsToTenantAsync(
             int tenantId,
@@ -141,23 +141,23 @@ namespace CleanArchCQRSandMediator.infra.Services
         {
             var belongs = await CurrentUserBelongsToTenantAsync(tenantId, cancellationToken);
             if (!belongs)
-                throw new ForbiddenException("No tiene acceso a este tenant.");
+                throw new ForbiddenException("You do not have access to this tenant.");
         }
 
         /// <summary>
-        /// Verifica que el usuario actual puede acceder al tenant indicado.
-        /// Super Admin: siempre puede. Usuario normal: debe pertenecer al tenant.
+        /// Verify that the current user can access the specified tenant.
+        /// Super Admin: always has access. Standard user: must belong to the tenant.
         /// </summary>
         public async Task EnsureCanAccessTenantAsync(
             int tenantId,
             CancellationToken cancellationToken = default)
         {
-            // Super Admin: acceso total (sin validar pertenencia)
+            // Super Admin: full access (without membership validation).
             var isSuperAdmin = await IsSuperAdminAsync(cancellationToken);
             if (isSuperAdmin)
                 return;
 
-            // Usuario normal: debe pertenecer al tenant
+            // Normal user: must belong to the tenant
             await EnsureCurrentUserBelongsToTenantAsync(tenantId, cancellationToken);
         }
     }

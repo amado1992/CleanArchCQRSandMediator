@@ -17,7 +17,10 @@ namespace CleanArchCQRSandMediator.infra.Persistence.Configurations
                    .UsingEntity<ApplicationRolePermission>(
                        r => r.HasOne<Permission>(e => e.Permission).WithMany(e => e.ApplicationRolePermissions).HasForeignKey(e => e.PermissionId).HasPrincipalKey(e => e.Id).OnDelete(DeleteBehavior.Restrict),
                        l => l.HasOne<ApplicationRole>(e => e.ApplicationRole).WithMany(e => e.ApplicationRolePermissions).HasForeignKey(e => e.ApplicationRoleId).HasPrincipalKey(e => e.Id).OnDelete(DeleteBehavior.Restrict),
-                       j => j.HasKey(e => e.Id));
+                       j => 
+                       {
+                           j.HasKey(rp => new { rp.ApplicationRoleId, rp.PermissionId }); 
+                       });
 
             // Optional one-to-many
             builder.HasOne(t => t.CreatedBy)

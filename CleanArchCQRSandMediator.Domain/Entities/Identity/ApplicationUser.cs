@@ -1,4 +1,5 @@
 ﻿using CleanArchCQRSandMediator.Domain.Entities.Business;
+using CleanArchCQRSandMediator.Domain.Entities.Business.Plan;
 using CleanArchCQRSandMediator.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
@@ -50,5 +51,8 @@ namespace CleanArchCQRSandMediator.Domain.Entities.Identity
 
         public List<Tenant> CreatedTenants { get; set; } = [];
         public List<Tenant> UpdatedTenants { get; set; } = [];
+
+        public List<Plan> Plans { get; } = [];
+        public List<Subscription> Subscriptions { get; } = [];
     }
 }

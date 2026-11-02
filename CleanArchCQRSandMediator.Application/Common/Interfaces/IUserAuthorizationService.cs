@@ -42,7 +42,7 @@
         Task<int?> GetDefaultTenantIdAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Verifica si un usuario pertenece a un tenant específico.
+        /// Checks whether a user belongs to a specific tenant.
         /// </summary>
         Task<bool> UserBelongsToTenantAsync(
             int userId,
@@ -50,14 +50,14 @@
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Verifica si el usuario actual pertenece a un tenant específico.
+        /// Check whether the current user belongs to a specific tenant.
         /// </summary>
         Task<bool> CurrentUserBelongsToTenantAsync(
             int tenantId,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Verifica que el usuario actual pertenece al tenant indicado.
+        /// Verify that the current user belongs to the specified tenant.
         /// Lanza <see cref="ForbiddenException"/> si no pertenece.
         /// </summary>
         Task EnsureCurrentUserBelongsToTenantAsync(
@@ -65,10 +65,10 @@
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Verifica que el usuario puede acceder al tenant indicado según su rol:
-        /// - Super Admin: siempre puede (sin validar pertenencia).
-        /// - Usuario normal: debe pertenecer al tenant.
-        /// Lanza <see cref="ForbiddenException"/> si no puede acceder.
+        /// Verify that the user can access the indicated tenant based on their role:
+        /// - Super Admin: always has permission (without verifying membership).
+        /// - Normal user: must belong to the tenant.
+        ///   Throws a <see cref="ForbiddenException"/> if access is not possible.
         /// </summary>
         Task EnsureCanAccessTenantAsync(
             int tenantId,
